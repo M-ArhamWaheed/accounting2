@@ -423,7 +423,7 @@ WHERE
                                                 // Query to get today's orders along with profit
                                                 $query = "
             SELECT 
-                ord.order_id AS bill_no,
+                ord.bill_no AS bill_no,
                 ord.grand_total,
                 COALESCE(SUM((oi.rate - pi.rate) * oi.quantity), 0) AS profit
             FROM 
