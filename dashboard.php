@@ -409,120 +409,67 @@ WHERE
                                         <div class="card-title">
                                             <strong>Today Bills</strong>
                                         </div>
-                                        <table class="table ">
+                                        <table class="table">
                                             <thead class="w-100">
                                                 <tr>
                                                     <th>Sr</th>
                                                     <th>Bill No</th>
-                                                    <th>Customer Name</th>
-                                                    <th>Rate</th>
+                                                    <th>Grand Total</th>
                                                     <th>Profit</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
-                                                    <td>01</td>
-                                                    <td>45665</td>
-                                                    <td>M-Arham Waheed</td>
-                                                    <td>4500</td>
-                                                    <td>800</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>01</td>
-                                                    <td>45665</td>
-                                                    <td>M-Arham Waheed</td>
-                                                    <td>4500</td>
-                                                    <td>800</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>01</td>
-                                                    <td>45665</td>
-                                                    <td>M-Arham Waheed</td>
-                                                    <td>4500</td>
-                                                    <td>800</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>01</td>
-                                                    <td>45665</td>
-                                                    <td>M-Arham Waheed</td>
-                                                    <td>4500</td>
-                                                    <td>800</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>01</td>
-                                                    <td>45665</td>
-                                                    <td>M-Arham Waheed</td>
-                                                    <td>4500</td>
-                                                    <td>800</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>01</td>
-                                                    <td>45665</td>
-                                                    <td>M-Arham Waheed</td>
-                                                    <td>4500</td>
-                                                    <td>800</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>01</td>
-                                                    <td>45665</td>
-                                                    <td>M-Arham Waheed</td>
-                                                    <td>4500</td>
-                                                    <td>800</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>01</td>
-                                                    <td>45665</td>
-                                                    <td>M-Arham Waheed</td>
-                                                    <td>4500</td>
-                                                    <td>800</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>01</td>
-                                                    <td>45665</td>
-                                                    <td>M-Arham Waheed</td>
-                                                    <td>4500</td>
-                                                    <td>800</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>01</td>
-                                                    <td>45665</td>
-                                                    <td>M-Arham Waheed</td>
-                                                    <td>4500</td>
-                                                    <td>800</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>01</td>
-                                                    <td>45665</td>
-                                                    <td>M-Arham Waheed</td>
-                                                    <td>4500</td>
-                                                    <td>800</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>01</td>
-                                                    <td>45665</td>
-                                                    <td>M-Arham Waheed</td>
-                                                    <td>4500</td>
-                                                    <td>800</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>01</td>
-                                                    <td>45665</td>
-                                                    <td>M-Arham Waheed</td>
-                                                    <td>4500</td>
-                                                    <td>800</td>
-                                                </tr>
+                                                <?php
+                                                // Query to get today's orders along with profit
+                                                $query = "
+            SELECT 
+                ord.order_id AS bill_no,
+                ord.grand_total,
+                COALESCE(SUM((oi.rate - pi.rate) * oi.quantity), 0) AS profit
+            FROM 
+                orders ord
+            LEFT JOIN 
+                order_item oi ON ord.order_id = oi.order_id
+            LEFT JOIN 
+                purchase_item pi ON oi.product_id = pi.product_id
+            WHERE 
+                ord.order_date = '$current_date'
+            GROUP BY 
+                ord.order_id
+        ";
+
+                                                $result = mysqli_query($dbc, $query);
+                                                $serial_number = 1; // Start serial number from 1
+
+                                                while ($row = mysqli_fetch_assoc($result)) {
+                                                    $bill_no = $row['bill_no'];
+                                                    $grand_total = number_format($row['grand_total']);
+                                                    $profit = number_format($row['profit']);
+
+                                                    echo "
+            <tr>
+                <td>{$serial_number}</td>
+                <td>{$bill_no}</td>
+                <td>{$grand_total}</td>
+                <td>{$profit}</td>
+            </tr>
+            ";
+
+                                                    $serial_number++;
+                                                }
+                                                ?>
                                             </tbody>
                                         </table>
+
                                     </div>
                                 </div>
-                            </div>
 
-                            <div class="row">
-
+                                <div class="row">
 
 
 
-                                <!-- <div class="col-md-6 col-xl-3 mb-4">
+
+                                    <!-- <div class="col-md-6 col-xl-3 mb-4">
                                 <div class="card shadow border-0">
                                     <div class="card-body">
                                         <div class="row align-items-center">
@@ -549,7 +496,7 @@ WHERE
                                     </div>
                                 </div>
                             </div> -->
-                                <!-- <div class="col-md-6 col-xl-3 mb-4">
+                                    <!-- <div class="col-md-6 col-xl-3 mb-4">
                                 <div class="card shadow border-0">
                                     <div class="card-body">
                                         <div class="row align-items-center">
@@ -573,78 +520,78 @@ WHERE
                             </div> -->
 
 
-                            </div>
-
-
-
-
-
-
-
-
-
-                        </div> <!-- .col-12 -->
-                    </div> <!-- .row -->
-
-
-                </div> <!-- .container-fluid -->
-
-                <div class="modal fade modal-shortcut modal-slide" tabindex="-1" role="dialog" aria-labelledby="defaultModalLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="defaultModalLabel">Shortcuts</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body px-5">
-                                <div class="row align-items-center">
-                                    <div class="col-6 text-center">
-                                        <div class="squircle bg-success justify-content-center">
-                                            <i class="fe fe-cpu fe-32 align-self-center text-white"></i>
-                                        </div>
-                                        <p>Control area</p>
-                                    </div>
-                                    <div class="col-6 text-center">
-                                        <div class="squircle bg-primary justify-content-center">
-                                            <i class="fe fe-activity fe-32 align-self-center text-white"></i>
-                                        </div>
-                                        <p>Activity</p>
-                                    </div>
                                 </div>
-                                <div class="row align-items-center">
-                                    <div class="col-6 text-center">
-                                        <div class="squircle bg-primary justify-content-center">
-                                            <i class="fe fe-droplet fe-32 align-self-center text-white"></i>
-                                        </div>
-                                        <p>Droplet</p>
-                                    </div>
-                                    <div class="col-6 text-center">
-                                        <div class="squircle bg-primary justify-content-center">
-                                            <i class="fe fe-upload-cloud fe-32 align-self-center text-white"></i>
-                                        </div>
-                                        <p>Upload</p>
-                                    </div>
+
+
+
+
+
+
+
+
+
+                            </div> <!-- .col-12 -->
+                        </div> <!-- .row -->
+
+
+                    </div> <!-- .container-fluid -->
+
+                    <div class="modal fade modal-shortcut modal-slide" tabindex="-1" role="dialog" aria-labelledby="defaultModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="defaultModalLabel">Shortcuts</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
                                 </div>
-                                <div class="row align-items-center">
-                                    <div class="col-6 text-center">
-                                        <div class="squircle bg-primary justify-content-center">
-                                            <i class="fe fe-users fe-32 align-self-center text-white"></i>
+                                <div class="modal-body px-5">
+                                    <div class="row align-items-center">
+                                        <div class="col-6 text-center">
+                                            <div class="squircle bg-success justify-content-center">
+                                                <i class="fe fe-cpu fe-32 align-self-center text-white"></i>
+                                            </div>
+                                            <p>Control area</p>
                                         </div>
-                                        <p>Users</p>
+                                        <div class="col-6 text-center">
+                                            <div class="squircle bg-primary justify-content-center">
+                                                <i class="fe fe-activity fe-32 align-self-center text-white"></i>
+                                            </div>
+                                            <p>Activity</p>
+                                        </div>
                                     </div>
-                                    <div class="col-6 text-center">
-                                        <div class="squircle bg-primary justify-content-center">
-                                            <i class="fe fe-settings fe-32 align-self-center text-white"></i>
+                                    <div class="row align-items-center">
+                                        <div class="col-6 text-center">
+                                            <div class="squircle bg-primary justify-content-center">
+                                                <i class="fe fe-droplet fe-32 align-self-center text-white"></i>
+                                            </div>
+                                            <p>Droplet</p>
                                         </div>
-                                        <p>Settings</p>
+                                        <div class="col-6 text-center">
+                                            <div class="squircle bg-primary justify-content-center">
+                                                <i class="fe fe-upload-cloud fe-32 align-self-center text-white"></i>
+                                            </div>
+                                            <p>Upload</p>
+                                        </div>
+                                    </div>
+                                    <div class="row align-items-center">
+                                        <div class="col-6 text-center">
+                                            <div class="squircle bg-primary justify-content-center">
+                                                <i class="fe fe-users fe-32 align-self-center text-white"></i>
+                                            </div>
+                                            <p>Users</p>
+                                        </div>
+                                        <div class="col-6 text-center">
+                                            <div class="squircle bg-primary justify-content-center">
+                                                <i class="fe fe-settings fe-32 align-self-center text-white"></i>
+                                            </div>
+                                            <p>Settings</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
         </main> <!-- main -->
     </div> <!-- .wrapper -->
     <script src="js/jquery.min.js"></script>
