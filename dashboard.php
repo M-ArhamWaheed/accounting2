@@ -116,11 +116,30 @@ $end_of_month = date('Y-m-t', strtotime($current_date));
                                             <div class="col pr-0">
                                                 <p class="small text-white mb-0">Today Profit</p>
                                                 <span class="h3 mb-0 text-white">
-                                                    <?php
-                                                    @$total_sales = mysqli_fetch_assoc(mysqli_query($dbc, "SELECT sum(paid) as total_sales FROM orders where order_date='$current_date' AND payment_type='cash_in_hand' "))['total_sales'];
-                                                    $total = isset($total_sales) ? $total_sales : "0";
-                                                    echo number_format($total);
-                                                    ?>
+                                                    <span class="h3 mb-0 text-white">
+                                                        <?php
+                                                        // Calculate today's total profit
+                                                        @$total_profit = mysqli_fetch_assoc(mysqli_query($dbc, "
+     SELECT 
+    COALESCE(SUM((o.rate - p.rate) * o.quantity), 0) AS total_profit
+FROM 
+    order_item o
+LEFT JOIN 
+    purchase_item p 
+ON 
+    o.product_id = p.product_id
+LEFT JOIN 
+    orders ord 
+ON 
+    o.order_id = ord.order_id
+WHERE 
+    ord.order_date = '$current_date'
+    "))['total_profit'];
+                                                        $total_profit = isset($total_profit) ? $total_profit : 0;
+
+                                                        echo  number_format($total_profit);
+                                                        ?>
+                                                    </span>
                                                 </span>
                                                 <!--   <span class="small text-white">+5.5%</span> -->
                                             </div>
@@ -204,8 +223,21 @@ $end_of_month = date('Y-m-t', strtotime($current_date));
                                             </div>
                                             <div class="col pr-0">
                                                 <p class="small text-muted mb-0">Purchase Bill Quantity</p>
-                                                <span class="h3 mb-0">
-                                                    50
+                                                <span class="h3 mb-0 ">
+                                                    <?php
+                                                    // Count today's total purchases
+                                                    @$total_purchases = mysqli_fetch_assoc(mysqli_query($dbc, "
+        SELECT 
+            COUNT(*) AS total_purchases
+        FROM 
+            purchase    
+        WHERE 
+            purchase_date = '$current_date'
+    "))['total_purchases'];
+                                                    $total_purchases = isset($total_purchases) ? $total_purchases : 0;
+
+                                                    echo  number_format($total_purchases);
+                                                    ?>
                                                 </span>
                                             </div>
                                         </div>
@@ -223,8 +255,21 @@ $end_of_month = date('Y-m-t', strtotime($current_date));
                                             </div>
                                             <div class="col pr-0">
                                                 <p class="small text-muted mb-0">Sale Bill Quantity</p>
-                                                <span class="h3 mb-0">
-                                                    60
+                                                <span class="h3 mb-0 ">
+                                                    <?php
+                                                    // Count today's total orders
+                                                    @$total_orders = mysqli_fetch_assoc(mysqli_query($dbc, "
+        SELECT 
+            COUNT(*) AS total_orders
+        FROM 
+            orders
+        WHERE 
+            order_date = '$current_date'
+    "))['total_orders'];
+                                                    $total_orders = isset($total_orders) ? $total_orders : 0;
+
+                                                    echo number_format($total_orders);
+                                                    ?>
                                                 </span>
                                             </div>
                                         </div>
