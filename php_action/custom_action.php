@@ -1009,12 +1009,14 @@ if (isset($_REQUEST['cash_purchase_supplier'])) {
 					$total = $qty = 0;
 					$product_quantites = (float)$_REQUEST['product_quantites'][$x];
 					$product_rates = (float)$_REQUEST['product_rates'][$x];
+					$product_salerates = (float)$_REQUEST['product_salerates'][$x];
 					$total = (float)$product_quantites * $product_rates;
 					$total_ammount += (float)$total;
 
 					$order_items = [
 						'product_id' => $_REQUEST['product_ids'][$x],
 						'rate' => $product_rates,
+						'sale_rate' => $product_salerates,
 						'total' => $total,
 						'purchase_id' => $last_id,
 						'product_detail' => @$_REQUEST['product_detail'][$x],
@@ -1113,11 +1115,13 @@ if (isset($_REQUEST['cash_purchase_supplier'])) {
 					$total = $qty = 0;
 					$product_quantites = (float)$_REQUEST['product_quantites'][$x];
 					$product_rates = (float)$_REQUEST['product_rates'][$x];
+					$product_salerates = (float)$_REQUEST['product_salerates'][$x];
 					$total = $product_quantites * $product_rates;
 					$total_ammount += (float)$total;
 					$purchase_item = [
 						'product_id' => $_REQUEST['product_ids'][$x],
 						'rate' => $product_rates,
+						'sale_rate' => $product_salerates,
 						'total' => $total,
 						'purchase_id' => $_REQUEST['product_purchase_id'],
 						'product_detail' => @$_REQUEST['product_detail'][$x],

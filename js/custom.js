@@ -555,6 +555,7 @@ $("#addProductPurchase").on("click", function () {
   var pro_details = $("#get_product_detail").val();
 
   var price = $("#get_product_price").val();
+  var sale_price = $("#get_product_sale_price").val();
   var id = $("#get_product_name :selected").val();
   var code = $("#get_product_code").val();
   var product_quantity = $("#get_product_quantity").val();
@@ -586,6 +587,7 @@ $("#addProductPurchase").on("click", function () {
     $("#add_pro_type").val("add");
     $("#get_product_code").val("");
     $("#get_product_price").val("");
+    $("#get_product_sale_price").val("");
     // $('#get_product_code').trigger('keyup');
     $("#get_product_quantity").val("1");
     $("#get_product_code").focus();
@@ -604,77 +606,32 @@ $("#addProductPurchase").on("click", function () {
           }
           total_price = parseFloat(price) * parseFloat(Currentquantity);
           if (Currentquantity <= max_qty) {
-            $("#product_idN_" + id).replaceWith(
-              '<tr id="product_idN_' +
-                id +
-                '">\
-			          <input type="hidden" data-price="' +
-                price +
-                '" data-quantity="' +
-                Currentquantity +
-                '" id="product_ids_' +
-                id +
-                '" class="product_ids" name="product_ids[]" value="' +
-                id +
-                '">\
-			          <input type="hidden" id="product_quantites_' +
-                id +
-                '" name="product_quantites[]" value="' +
-                product_quantity +
-                '">\
-                <input type="hidden" id="product_detail_' +
-                id +
-                '" name="product_detail[]" value="' +
-                pro_details +
-                '">\
-			          <input type="hidden" id="product_rate_' +
-                id +
-                '" name="product_rates[]" value="' +
-                price +
-                '">\
-			          <input type="hidden" id="product_totalrate_' +
-                id +
-                '" name="product_totalrates[]" value="' +
-                total_price +
-                '">\
-			          <td>' +
-                code +
-                "</td>\
-			          <td>" +
-                name +
-                " </td>\
-                 <td>" +
-                pro_details +
-                " </td>\
-			          <td>" +
-                price +
-                "</td>\
-			          <td>" +
-                Currentquantity +
-                "</td>\
-			          <td>" +
-                total_price +
-                '</td>\
-			          <td>\
-			            <button type="button" onclick="removeByid(`#product_idN_' +
-                id +
-                '`)" class="fa fa-trash text-danger" ></button>\
-			            <button type="button" onclick="editByid(' +
-                id +
-                ",`" +
-                code +
-                "`,`" +
-                pro_details +
-                "`,`" +
-                price +
-                "`,`" +
-                product_quantity +
-                '`)" class="fa fa-edit text-success"  ></button>\
-			            </td>\
-			          </tr>'
-            );
+            $("#product_idN_" + id).replaceWith(`
+        <tr id="product_idN_${id}">
+            <input type="hidden" data-price="${price}" data-quantity="${Currentquantity}" 
+                   id="product_ids_${id}" class="product_ids" name="product_ids[]" value="${id}">
+            <input type="hidden" id="product_quantites_${id}" name="product_quantites[]" value="${product_quantity}">
+            <input type="hidden" id="product_detail_${id}" name="product_detail[]" value="${pro_details}">
+            <input type="hidden" id="product_rate_${id}" name="product_rates[]" value="${price}">
+            <input type="hidden" id="product_totalrate_${id}" name="product_totalrates[]" value="${total_price}">
+            <input type="hidden" id="product_salerate_${id}" name="product_salerates[]" value="${sale_price}">
+            <td>${code}</td>
+            <td>${name}</td>
+            <td>${pro_details}</td>
+            <td>${price}</td>
+            <td>${sale_price}</td>
+            <td>${Currentquantity}</td>
+            <td>${total_price}</td>
+            <td>
+                <button type="button" onclick="removeByid('#product_idN_${id}')" 
+                        class="fa fa-trash text-danger"></button>
+                <button type="button" onclick="editByid(${id}, '${code}', '${pro_details}', '${price}','${sale_price}', '${product_quantity}')" 
+                        class="fa fa-edit text-success"></button>
+            </td>
+        </tr>
+    `);
           } else {
-            sweeetalert("Cannot Add Quantity more then  stock", "error", 1500);
+            sweeetalert("Cannot Add Quantity more than stock", "error", 1500);
           }
         }
         getOrderTotal();
@@ -682,75 +639,30 @@ $("#addProductPurchase").on("click", function () {
     } else {
       total_price = parseFloat(price) * parseFloat(product_quantity);
 
-      $("#purchase_product_tb").append(
-        '<tr id="product_idN_' +
-          id +
-          '">\
-			          <input type="hidden" data-price="' +
-          price +
-          '"  data-quantity="' +
-          product_quantity +
-          '" id="product_ids_' +
-          id +
-          '" class="product_ids" name="product_ids[]" value="' +
-          id +
-          '">\
-			          <input type="hidden" id="product_quantites_' +
-          id +
-          '" name="product_quantites[]" value="' +
-          product_quantity +
-          '">\
-                <input type="hidden" id="product_detail_' +
-          id +
-          '" name="product_detail[]" value="' +
-          pro_details +
-          '">\
-			          <input type="hidden" id="product_rate_' +
-          id +
-          '" name="product_rates[]" value="' +
-          price +
-          '">\
-			          <input type="hidden" id="product_totalrate_' +
-          id +
-          '" name="product_totalrates[]" value="' +
-          total_price +
-          '">\
-			          <td>' +
-          code +
-          "</td>\
-			          <td>" +
-          name +
-          " </td>\
-                <td>" +
-          pro_details +
-          " </td>\
-			           <td>" +
-          price +
-          "</td>\
-			           <td>" +
-          product_quantity +
-          "</td>\
-			          <td>" +
-          total_price +
-          '</td>\
-			          <td>\
-			            <button type="button" onclick="removeByid(`#product_idN_' +
-          id +
-          '`)" class="fa fa-trash text-danger" href="#" ></button>\
-			            <button type="button" onclick="editByid(' +
-          id +
-          ",`" +
-          code +
-          "`,`" +
-          pro_details +
-          "`,`" +
-          price +
-          "`,`" +
-          product_quantity +
-          '`)" class="fa fa-edit text-success"  ></button>\
-			            </td>\
-			          </tr>'
-      );
+      $("#purchase_product_tb").append(`
+    <tr id="product_idN_${id}">
+        <input type="hidden" data-price="${price}" data-quantity="${product_quantity}" 
+               id="product_ids_${id}" class="product_ids" name="product_ids[]" value="${id}">
+        <input type="hidden" id="product_quantites_${id}" name="product_quantites[]" value="${product_quantity}">
+        <input type="hidden" id="product_detail_${id}" name="product_detail[]" value="${pro_details}">
+        <input type="hidden" id="product_rate_${id}" name="product_rates[]" value="${price}">
+        <input type="hidden" id="product_totalrate_${id}" name="product_totalrates[]" value="${total_price}">
+        <input type="hidden" id="product_salerate_${id}" name="product_salerates[]" value="${sale_price}">
+        <td>${code}</td>
+        <td>${name}</td>
+        <td>${pro_details}</td>
+        <td>${price}</td>
+        <td>${sale_price}</td>
+        <td>${product_quantity}</td>
+        <td>${total_price}</td>
+        <td>
+            <button type="button" onclick="removeByid('#product_idN_${id}')" 
+                    class="fa fa-trash text-danger"></button>
+            <button type="button" onclick="editByid(${id}, '${code}', '${pro_details}', '${price}','${sale_price}', '${product_quantity}')" 
+                    class="fa fa-edit text-success"></button>
+        </td>
+    </tr>
+`);
 
       getOrderTotal();
     }
@@ -809,13 +721,14 @@ function getOrderTotal() {
 
   getRemaingAmount();
 }
-function editByid(id, code, pro_details, price, qty) {
+function editByid(id, code, pro_details, price, sale_price, qty) {
   // alert(pro_details);
   $(".searchableSelect").val(id);
 
   $("#get_product_code").val(code);
   $("#get_product_quantity").val(qty);
   $("#get_product_detail").val(pro_details);
+  $("#get_product_sale_price").val(sale_price);
   $("#add_pro_type").val("update");
 
   var effect = function () {
