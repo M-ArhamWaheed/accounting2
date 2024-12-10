@@ -320,15 +320,49 @@ if (!empty($_REQUEST['action']) and $_REQUEST['action'] == "product_module") {
 	$purchase_rate = $total = 0;
 	$category_price = fetchRecord($dbc, "categories", "categories_id", $_REQUEST['category_id']);
 
-	$total = (float)$_REQUEST['product_mm'] * (float)$_REQUEST['product_inch'] * (float)$_REQUEST['product_meter'];
-	$purchase_rate = ($total * (float)$category_price['category_purchase']) / 54;
+	$total = (float)@$_REQUEST['product_mm'] * (float)@$_REQUEST['product_inch'] * (float)@$_REQUEST['product_meter'];
+	$purchase_rate = ($total * (float)@$category_price['category_purchase']) / 54;
 	$purchase_rate = round($purchase_rate);
+
+	$brand_id = $_REQUEST['brand_id'];
+	if (empty($brand_id) && isset($_REQUEST['new_brand_name'])) {
+		$newBrandName = $_REQUEST['new_brand_name'];
+		$newBrandStatus = 1;
+
+		$insertBrandQuery = "INSERT INTO brands (brand_name, brand_status) VALUES ('$newBrandName', $newBrandStatus)";
+		if (mysqli_query($dbc, $insertBrandQuery)) {
+			$brand_id = mysqli_insert_id($dbc);
+		} else {
+			echo json_encode([
+				"msg" => "Failed to add new brand: " . mysqli_error($dbc),
+				"sts" => "error"
+			]);
+			exit;
+		}
+	}
+
+	$category_id = $_REQUEST['category_id'];
+	if (empty($category_id) && isset($_REQUEST['new_category_name'])) {
+		$newCategoryName = $_REQUEST['new_category_name'];
+		$newCategoryStatus = 1;
+
+		$insertCategoryQuery = "INSERT INTO categories (categories_name, categories_status) VALUES ('$newCategoryName', $newCategoryStatus)";
+		if (mysqli_query($dbc, $insertCategoryQuery)) {
+			$category_id = mysqli_insert_id($dbc);
+		} else {
+			echo json_encode([
+				"msg" => "Failed to add new category: " . mysqli_error($dbc),
+				"sts" => "error"
+			]);
+			exit;
+		}
+	}
 
 	$data_array = [
 		'product_name' => $_REQUEST['product_name'],
 		'product_code' => @$_REQUEST['product_code'],
-		'brand_id' => @$_REQUEST['brand_id'],
-		'category_id' => @$_REQUEST['category_id'],
+		'brand_id' => $brand_id,
+		'category_id' => $category_id,
 		'product_mm' => @$_REQUEST['product_mm'],
 		'product_inch' => @$_REQUEST['product_inch'],
 		'product_meter' => @$_REQUEST['product_meter'],
@@ -336,14 +370,13 @@ if (!empty($_REQUEST['action']) and $_REQUEST['action'] == "product_module") {
 		'product_description' => @$_REQUEST['product_description'],
 		't_days' => @$_REQUEST['t_days'],
 		'f_days' => @$_REQUEST['f_days'],
-		'product_description' => @$_REQUEST['product_description'],
 		'alert_at' => @$_REQUEST['alert_at'],
 		'availability' => @$_REQUEST['availability'],
 		'purchase_rate' => $purchase_rate,
 		'status' => 1,
 	];
-	if ($_REQUEST['product_id'] == "") {
 
+	if ($_REQUEST['product_id'] == "") {
 		if (insert_data($dbc, "product", $data_array)) {
 			$last_id = mysqli_insert_id($dbc);
 
@@ -355,7 +388,6 @@ if (!empty($_REQUEST['action']) and $_REQUEST['action'] == "product_module") {
 				];
 				update_data($dbc, "product", $data_image, "product_id", $last_id);
 			}
-
 
 			$response = [
 				"msg" => "Product Has Been Added",
@@ -370,6 +402,7 @@ if (!empty($_REQUEST['action']) and $_REQUEST['action'] == "product_module") {
 			];
 		}
 	} else {
+		// Update existing product
 		if (update_data($dbc, "product", $data_array, "product_id", base64_decode($_REQUEST['product_id']))) {
 			$last_id = $_REQUEST['product_id'];
 
@@ -397,6 +430,7 @@ if (!empty($_REQUEST['action']) and $_REQUEST['action'] == "product_module") {
 	}
 	echo json_encode($response);
 }
+
 
 if (!empty($_REQUEST['action']) and $_REQUEST['action'] == "inventory_module") {
 
