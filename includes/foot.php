@@ -177,14 +177,12 @@
                  <label for="">Brand</label>
                  <input type="text" class="form-control" value="<?= @$brands['brand_name'] ?>" id="add_brand_name" name="add_brand_name">
                  <input type="hidden" class="form-control " value="<?= @$brands['brand_id'] ?>" id="brand_id" name="brand_id">
-
                </div>
                <div class="col-sm-6">
                  <label for="">Brand Status</label>
                  <select class="form-control" id="brand_status" name="brand_status">
                    <option <?= @($brands['brand_status'] == 0) ? "selected" : "" ?> value="0">Inactive</option>
                    <option <?= @($brands['brand_status'] == 1) ? "selected" : "selected" ?> value="1">Active</option>
-
                  </select>
                </div>
              </div>
