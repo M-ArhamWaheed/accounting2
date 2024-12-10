@@ -46,7 +46,10 @@
 
                  <input type="text" name="order_date" id="order_date" value="<?= @empty($_REQUEST['edit_order_id']) ? date('Y-m-d') : $fetchOrder['order_date'] ?>" readonly class="form-control">
                </div>
-
+               <div class="col-md-2">
+                 <label>Bill No</label>
+                 <input type="text" name="bill_no" autocomplete="off" id="get_bill_no" value="<?= @$fetchOrder['bill_no'] ?>" class="form-control">
+               </div>
                <div class="col-sm-2">
                  <label>Customer Number</label>
                  <input type="number" onchange="getCustomer_name(this.value)" value="<?= @$fetchOrder['client_contact'] ?>" autocomplete="off" min="0" class="form-control" name="client_contact" list="phone">
@@ -88,10 +91,6 @@
                  <label>Comment </label>
 
                  <input type="text" autocomplete="off" name="order_narration" id="order_narration" value="<?= @$fetchOrder['order_narration'] ?>" class="form-control">
-               </div>
-               <div class="col-md-2">
-                 <label>Bill No</label>
-                 <input type="text" name="bill_no" autocomplete="off" id="get_bill_no" value="<?= @$fetchOrder['bill_no'] ?>" class="form-control">
                </div>
              </div> <!-- end of form-group -->
              <div class="form-group row">

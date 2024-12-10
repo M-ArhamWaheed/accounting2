@@ -954,6 +954,7 @@ if (isset($_REQUEST['cash_purchase_supplier'])) {
 
 		$data = [
 			'purchase_date' => $_REQUEST['purchase_date'],
+			'bill_no' => $_REQUEST['bill_no'],
 			'client_name' => @$_REQUEST['cash_purchase_supplier'],
 			'client_contact' => @$_REQUEST['client_contact'],
 			'purchase_narration' => @$_REQUEST['purchase_narration'],
