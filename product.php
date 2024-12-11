@@ -43,19 +43,15 @@ $btn_name = isset($_REQUEST['edit_product_id']) ? "Update" : "Add";
 
 
                 <div class="form-group row">
-                  <div class="col-sm-6 mb-3 mb-sm-0">
+                  <div class="col-sm-2 mb-3 mb-sm-0">
                     <label for="">Product Name</label>
                     <input type="text" class="form-control" id="product_name" placeholder="Product Name" name="product_name" required value="<?= @$fetchproduct['product_name'] ?>">
                   </div>
-                  <div class="col-sm-6 mb-3 mb-sm-0">
+                  <div class="col-sm-2 mb-3 mb-sm-0">
                     <label for="">Product Code</label>
                     <input type="text" class="form-control" id="product_code" placeholder="Product Code" name="product_code" required value="<?= @$fetchproduct['product_code'] ?>">
                   </div>
-                </div>
-
-                <div class="form-group row">
-                  <!-- Product Brand Section -->
-                  <div class="col-sm-5">
+                  <div class="col-sm-2">
                     <label for="">Product Brand</label>
                     <div id="brandDropdownContainer">
                       <select class="form-control searchableSelect tableData" name="brand_id" id="tableData" size="1">
@@ -69,9 +65,8 @@ $btn_name = isset($_REQUEST['edit_product_id']) ? "Update" : "Add";
                       </select>
                     </div>
                     <div id="newBrandDiv" style="display:none;">
-                      <input type="text" class="form-control mt-2" id="new_brand_name" name="new_brand_name" placeholder="Add New Brand">
+                      <input type="text" class="form-control" id="new_brand_name" name="new_brand_name" placeholder="Add New Brand">
                       <input type="hidden" id="new_brand_status" name="new_brand_status" value="1">
-                      <button type="button" class="btn btn-danger btn-sm mt-2" id="cancelBrandBtn">Cancel</button>
                     </div>
                   </div>
                   <div class="col-1 col-md-1">
@@ -79,8 +74,9 @@ $btn_name = isset($_REQUEST['edit_product_id']) ? "Update" : "Add";
                     <button type="button" class="btn btn-success btn-sm" id="addBrandBtn">
                       <i class="fa fa-plus"></i>
                     </button>
+                    <button type="button" class="btn btn-danger btn-sm " style="display: none;" id="cancelBrandBtn">Cancel</button>
                   </div>
-                  <div class="col-sm-5">
+                  <div class="col-sm-2">
                     <label for="">Product Category</label>
                     <div id="categoryDropdownContainer">
                       <select class="form-control searchableSelect" name="category_id" id="tableData1" size="1">
@@ -94,9 +90,8 @@ $btn_name = isset($_REQUEST['edit_product_id']) ? "Update" : "Add";
                       </select>
                     </div>
                     <div id="newCategoryDiv" style="display:none;">
-                      <input type="text" class="form-control mt-2" id="new_category_name" name="new_category_name" placeholder="Add New Category">
+                      <input type="text" class="form-control " id="new_category_name" name="new_category_name" placeholder="Add New Category">
                       <input type="hidden" id="new_category_status" name="new_category_status" value="1">
-                      <button type="button" class="btn btn-danger btn-sm mt-2" id="cancelCategoryBtn">Cancel</button>
                     </div>
                   </div>
                   <div class="col-1 col-md-1">
@@ -104,27 +99,27 @@ $btn_name = isset($_REQUEST['edit_product_id']) ? "Update" : "Add";
                     <button type="button" class="btn btn-danger btn-sm" id="addCategoryBtn">
                       <i class="fa fa-plus"></i>
                     </button>
+                    <button type="button" class="btn btn-danger btn-sm " style="display: none;" id="cancelCategoryBtn">Cancel</button>
                   </div>
-
-                  <div class="col-sm-4 mt-3 mb-sm-0">
+                  <div class="col-sm-2 mt-3 mb-sm-0">
                     <label for=""> Rate</label>
                     <input type="text" class="form-control" id="current_rate" placeholder=" Rate" name="current_rate" required value="<?= @$fetchproduct['current_rate'] ?>">
                   </div>
-                  <div class="col-sm-4 mt-3">
+                  <div class="col-sm-3 mt-3">
                     <label for="">Product Alert on Quantity</label>
                     <input type="text" required class="form-control" value="<?= (empty($fetchproduct)) ? 5 : $fetchproduct['alert_at'] ?>" id="alert_at" placeholder="Product Stock Alert" name="alert_at">
                   </div>
-                  <div class="col-sm-4 mt-3">
+                  <div class="col-sm-3 mt-3">
                     <label>Product Image</label>
 
                     <input type="file" class="form-control" id="product_image" name="product_image" accept="image/*">
                   </div>
-                  <div class="col-sm-6 mt-3 mb-sm-0">
+                  <div class="col-sm-3 mt-3 mb-sm-0">
                     <label for="">Product Description</label>
 
                     <textarea class="form-control" name="product_description" placeholder="Product Description"><?= @$fetchproduct['product_description'] ?></textarea>
                   </div>
-                  <div class="col-sm-6 mt-3 mb-sm-0">
+                  <div class="col-sm-3 mt-3 mb-sm-0">
 
                     <label for="">Status</label>
                     <select class="form-control" required name="availability" id="availability">
@@ -133,6 +128,12 @@ $btn_name = isset($_REQUEST['edit_product_id']) ? "Update" : "Add";
                     </select>
 
                   </div>
+                </div>
+
+                <div class="form-group row">
+                  <!-- Product Brand Section -->
+
+
                 </div>
                 <button class="btn btn-admin float-right" type="submit" id="add_product_btn">Save</button>
               </form>
@@ -236,6 +237,7 @@ $btn_name = isset($_REQUEST['edit_product_id']) ? "Update" : "Add";
     // Show the input field for adding a new Brand when the "plus" button is clicked
     $("#addBrandBtn").click(function() {
       $("#brandDropdownContainer").hide(); // Hide the dropdown
+      $("#cancelBrandBtn").show(); // Hide the dropdown
       $("#newBrandDiv").show(); // Show the input field for new brand
     });
 
@@ -248,6 +250,7 @@ $btn_name = isset($_REQUEST['edit_product_id']) ? "Update" : "Add";
     // Hide the input field and show the brand dropdown again
     $("#cancelBrandBtn").click(function() {
       $("#newBrandDiv").hide(); // Hide the input field for new brand
+      $("#cancelCategoryBtn").show(); // Hide the input field for new brand
       $("#brandDropdownContainer").show(); // Show the brand dropdown again
     });
 
