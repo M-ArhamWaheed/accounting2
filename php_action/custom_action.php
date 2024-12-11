@@ -512,16 +512,18 @@ if (isset($_REQUEST['getPrice'])) {
 		$price = $record['t_days'];
 	} else {
 		if ($_REQUEST['payment_type'] == "credit_purchase" or $_REQUEST['payment_type'] == "cash_purchase") {
-			$price = $record['purchase_rate'];
-			if ($price == 0 or $price == '0') {
-				$q = mysqli_fetch_assoc(mysqli_query($dbc, "SELECT * FROM purchase_item WHERE product_id = '$record[product_id]' AND rate != 0  ORDER BY purchase_item_id DESC "));
-				$price = $q['rate'];
-			} else {
-				$price = $record['purchase_rate'];
-			}
-		} else {
+			// $price = $record['current_rate'];
+			// $q = mysqli_fetch_assoc(mysqli_query($dbc, "SELECT * FROM purchase_item WHERE product_id = '$record[product_id]' AND rate != 0  ORDER BY purchase_item_id DESC "));
+			// $price = @$q['rate'];
+			// $sale_rate = @$q['sale_rate'];
+			// if ($price == 0 or $price == '0') {
+			// } else {
+			// 	$price = $record['purchase_rate'];
+			// }
 			$price = $record['current_rate'];
 		}
+		// } else {
+		// }
 	}
 
 
@@ -1031,6 +1033,12 @@ if (isset($_REQUEST['cash_purchase_supplier'])) {
 						$quantity_instock = mysqli_fetch_assoc(mysqli_query($dbc, "SELECT quantity_instock FROM  product WHERE product_id='" . $product_id . "' "));
 						$qty = (float)$quantity_instock['quantity_instock'] + $product_quantites;
 						$quantity_update = mysqli_query($dbc, "UPDATE product SET  quantity_instock='$qty' WHERE product_id='" . $product_id . "' ");
+					}
+					if (isset($_REQUEST['product_salerates'][$x])) {
+						$product_id = $_REQUEST['product_ids'][$x];
+						$quantity_instock = mysqli_fetch_assoc(mysqli_query($dbc, "SELECT current_rate FROM  product WHERE product_id='" . $product_id . "' "));
+						$qty = $_REQUEST['product_salerates'][$x];
+						$quantity_update = mysqli_query($dbc, "UPDATE product SET  current_rate='$qty' WHERE product_id='" . $product_id . "' ");
 					}
 
 
