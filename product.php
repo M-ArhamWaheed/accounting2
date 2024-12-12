@@ -235,22 +235,24 @@ $btn_name = isset($_REQUEST['edit_product_id']) ? "Update" : "Add";
       $("#cancelBrandBtn").show(); // Hide the dropdown
       $("#newBrandDiv").show(); // Show the input field for new brand
     });
-
+    
     // Show the input field for adding a new Category when the "plus" button is clicked
-    $("#addCategoryBtn").click(function() {
-      $("#categoryDropdownContainer").hide(); // Hide the dropdown
-      $("#newCategoryDiv").show(); // Show the input field for new category
-    });
-
+    
     // Hide the input field and show the brand dropdown again
     $("#cancelBrandBtn").click(function() {
       $("#newBrandDiv").hide(); // Hide the input field for new brand
-      $("#cancelCategoryBtn").show(); // Hide the input field for new brand
+      $("#cancelBrandBtn").hide(); // Hide the dropdown
       $("#brandDropdownContainer").show(); // Show the brand dropdown again
     });
-
+    
+    $("#addCategoryBtn").click(function() {
+      $("#categoryDropdownContainer").hide(); // Hide the dropdown
+      $("#cancelCategoryBtn").show(); // Hide the input field for new brand
+      $("#newCategoryDiv").show(); // Show the input field for new category
+    });
     // Hide the input field and show the category dropdown again
     $("#cancelCategoryBtn").click(function() {
+      $("#cancelCategoryBtn").hide(); // Hide the input field for new brand
       $("#newCategoryDiv").hide(); // Hide the input field for new category
       $("#categoryDropdownContainer").show(); // Show the category dropdown again
     });
