@@ -500,35 +500,20 @@ if (isset($_REQUEST['get_products_list'])) {
 		}
 	}
 }
-if (isset($_REQUEST['getPrice'])) {
+if (!empty($_REQUEST['getPrice'])) {
 	if ($_REQUEST['type'] == "product") {
 		$record = fetchRecord($dbc, "product", "product_id", $_REQUEST['getPrice']);
 	} else {
 		$record = fetchRecord($dbc, "product", "product_code", $_REQUEST['getPrice']);
 	}
-	if (isset($_REQUEST['credit_sale_type'])  and $_REQUEST['credit_sale_type'] == "15days") {
-		$price = $record['f_days'];
-	} elseif (isset($_REQUEST['credit_sale_type'])  and $_REQUEST['credit_sale_type'] == "30days") {
-		$price = $record['t_days'];
-	} else {
-		if ($_REQUEST['payment_type'] == "credit_purchase" or $_REQUEST['payment_type'] == "cash_purchase") {
-			// $price = $record['current_rate'];
-			// $q = mysqli_fetch_assoc(mysqli_query($dbc, "SELECT * FROM purchase_item WHERE product_id = '$record[product_id]' AND rate != 0  ORDER BY purchase_item_id DESC "));
-			// $price = @$q['rate'];
-			// $sale_rate = @$q['sale_rate'];
-			// if ($price == 0 or $price == '0') {
-			// } else {
-			// 	$price = $record['purchase_rate'];
-			// }
-			$price = $record['current_rate'];
-		}
-		// } else {
-		// }
-	}
+	$price = @$record['current_rate'];
+
+
+
 
 
 	$response = [
-		"price" => @$price,
+		"price" => isset($price) ? $price : 0,
 		"qty" => @(float)$record['quantity_instock'],
 		"sts" => "success",
 		"type" => @$_REQUEST['credit_sale_type'],

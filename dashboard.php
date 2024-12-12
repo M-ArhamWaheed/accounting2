@@ -19,6 +19,61 @@ $end = date("Y-m-d", $last_end_week);
 $start_of_month = date('Y-m-01', strtotime(date('Y-m-d')));
 // Last day of the month.
 $end_of_month = date('Y-m-t', strtotime($current_date));
+
+
+// 
+$date_select = '';
+if (isset($_REQUEST['orderdate']) && $_REQUEST['orderdate'] !== '') {
+    $selectedOption = $_POST['orderdate'];
+
+    switch ($selectedOption) {
+        case 'today':
+            $date_select = "AND DATE_FORMAT(timestamp, '%Y-%m-%d') = '" . date('Y-m-d') . "'";
+            break;
+
+        case 'yesterday':
+            $yesterday = date('Y-m-d', strtotime('-1 day'));
+            $date_select = "AND DATE_FORMAT(timestamp, '%Y-%m-%d') = '$yesterday'";
+            break;
+
+        case 'last7days':
+            $date_select = "AND DATE_FORMAT(timestamp, '%Y-%m-%d') >= '" . date('Y-m-d', strtotime('-7 days')) . "'";
+            break;
+
+        case 'last30days':
+            $date_select = "AND DATE_FORMAT(timestamp, '%Y-%m-%d') >= '" . date('Y-m-d', strtotime('-30 days')) . "'";
+            break;
+
+        case 'thismonth':
+            $date_select = "AND DATE_FORMAT(timestamp, '%Y-%m') = '" . date('Y-m') . "'";
+            break;
+
+        case 'lastmonth':
+            $lastMonth = date('Y-m', strtotime('last month'));
+            $date_select = "AND DATE_FORMAT(timestamp, '%Y-%m') = '$lastMonth'";
+            break;
+
+        default:
+            // Handle the default case (e.g., when no option is selected)
+            $date_select = "AND DATE_FORMAT(timestamp, '%Y-%m-%d') = '" . date('Y-m-d') . "'";
+            break;
+    }
+} elseif (isset($_REQUEST['start_date']) && $_REQUEST['start_date'] !== '' && empty($_REQUEST['end_date'])) {
+
+    $start_date =  $_REQUEST['start_date'];
+
+    $date_select = "AND DATE_FORMAT(timestamp, '%Y-%m-%d') = '$start_date'";
+} elseif (isset($_REQUEST['start_date']) && $_REQUEST['start_date'] !== '' && isset($_REQUEST['end_date'])) {
+
+    $start_date = $_REQUEST['start_date'];
+
+    $end_date = $_REQUEST['end_date'];
+
+    $date_select = "AND DATE_FORMAT(timestamp, '%Y-%m-%d') BETWEEN '$start_date' AND '$end_date'";
+} else {
+
+    $date_select = " AND DATE_FORMAT(timestamp, '%Y-%m-%d') = '" . date('Y-m-d') . "'";
+}
 ?>
 <style>
     .table-card {
@@ -35,22 +90,53 @@ $end_of_month = date('Y-m-t', strtotime($current_date));
                 <div class="row justify-content-center">
                     <div class="col-12">
                         <div class="row align-items-center mb-2">
-                            <div class="col">
-                                <h2 class="h5 page-title">Welcome!</h2>
+                            <div class="col-4 d-flex align-items-center ">
+                                <button type="button" class="btn btn-primary  filter_btn" data-toggle="modal" data-target="#modalCookie1"><i class="fa fa-filter"></i></button>
                             </div>
-                            <div class="col-auto">
-                                <form class="form-inline">
-                                    <div class="form-group d-none d-lg-inline">
-                                        <label for="reportrange" class="sr-only">Date Ranges</label>
-                                        <div id="reportrange" class="px-2 py-2 text-muted">
-                                            <span class="small"></span>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <button type="button" class="btn btn-sm" id="refresh" data-toggle="tooltip" data-placement="bottom" title="Refresh"><span class="fe fe-refresh-ccw fe-16 text-muted"></span></button>
-                                        <button type="button" class="btn btn-sm mr-2"><span class="fe fe-filter fe-16 text-muted"></span></button>
-                                    </div>
-                                </form>
+                            <div class="col-8 justify-content-end d-flex align-items-center">
+                                <div class="w-75 justify-content-end d-flex align-items-center">
+                                    <?php
+                                    if (isset($_REQUEST['orderdate']) && $_REQUEST['orderdate'] !== '') {
+                                        $selectedOption = $_POST['orderdate'];
+
+                                        if ($selectedOption == 'today') {
+                                            // Handle the case for Today
+                                            $selectedOption = 'Today';
+                                            echo "<h4 class='my-0 font-weight-bold mx-2'>From</h4> <h5 class='my-0'> $selectedOption</h5>";
+                                        } elseif ($selectedOption == 'yesterday') {
+                                            // Handle the case for Yesterday
+                                            $selectedOption = 'Yesterday';
+                                            echo "<h4 class='my-0 font-weight-bold mx-2'>From</h4> <h5 class='my-0'> $selectedOption</h5>";
+                                        } elseif ($selectedOption == 'last7days') {
+                                            // Handle the case for Last 7 Days
+                                            $selectedOption = 'Last 7 Days';
+                                            echo "<h4 class='my-0 font-weight-bold mx-2'>From</h4> <h5 class='my-0'> $selectedOption</h5>";
+                                        } elseif ($selectedOption == 'last30days') {
+                                            // Handle the case for Last 30 Days
+                                            $selectedOption = 'Last 30 Days';
+                                            echo "<h4 class='my-0 font-weight-bold mx-2'>From</h4> <h5 class='my-0'> $selectedOption</h5>";
+                                        } elseif ($selectedOption == 'thismonth') {
+                                            // Handle the case for This Month
+                                            $selectedOption = 'This Month';
+                                            echo "<h4 class='my-0 font-weight-bold mx-2'>From</h4> <h5 class='my-0'> $selectedOption</h5>";
+                                        } elseif ($selectedOption == 'lastmonth') {
+                                            // Handle the case for Last Month
+                                            $selectedOption = 'Last Month';
+                                            echo "<h4 class='my-0 font-weight-bold mx-2'>From</h4> <h5 class='my-0'> $selectedOption</h5>";
+                                        }
+                                    } elseif (isset($_REQUEST['start_date']) && $_REQUEST['start_date'] !== '' && empty($_REQUEST['end_date'])) {
+                                        $start_date = $_REQUEST['start_date'];
+                                        echo "<h4 class='my-0 font-weight-bold mx-2'>From</h4> <h5 class='my-0'> $start_date</h5>";
+                                    } elseif (isset($_REQUEST['start_date']) && $_REQUEST['start_date'] !== '' && isset($_REQUEST['end_date'])) {
+                                        $start_date = $_REQUEST['start_date'];
+                                        $end_date = $_REQUEST['end_date'];
+                                        echo "<h4 class='my-0 font-weight-bold mx-2'>From</h4> <h5 class='my-0'>$start_date <h4 class='my-0 font-weight-bold mx-2'>To</h4> $end_date</h5>";
+                                    } else {
+                                        $start_date = date('Y-m-d');
+                                        echo "<h4 class='my-0 font-weight-bold mx-2'>From</h4> <h5 class='my-0'>$start_date</h5>";
+                                    }
+                                    ?>
+                                </div>
                             </div>
                         </div>
 
@@ -70,7 +156,8 @@ $end_of_month = date('Y-m-t', strtotime($current_date));
                                                 <p class="small text-white mb-0">Today Sales</p>
                                                 <span class="h3 mb-0 text-white">
                                                     <?php
-                                                    @$total_sales = mysqli_fetch_assoc(mysqli_query($dbc, "SELECT sum(grand_total) as total_sales FROM orders where order_date='$current_date' "))['total_sales'];
+                                                    @$total_sales = mysqli_fetch_assoc(mysqli_query($dbc, "SELECT sum(grand_total) as total_sales , timestamp FROM orders where 1=1  $date_select "))['total_sales'];
+                                                    // echo "SELECT sum(grand_total) as total_sales , timestamp FROM orders where 1=1 $date_select ";
                                                     $total = isset($total_sales) ? $total_sales : "0";
                                                     echo number_format($total);
                                                     ?>
@@ -94,7 +181,7 @@ $end_of_month = date('Y-m-t', strtotime($current_date));
                                                 <p class="small text-white mb-0">Today Purchase</p>
                                                 <span class="h3 mb-0 text-white">
                                                     <?php
-                                                    @$total_purchase = mysqli_fetch_assoc(mysqli_query($dbc, "SELECT sum(grand_total) as total_sales FROM purchase where purchase_date='$current_date' "))['total_sales'];
+                                                    @$total_purchase = mysqli_fetch_assoc(mysqli_query($dbc, "SELECT sum(grand_total) as total_sales , timestamp FROM purchase where 1=1 $date_select "))['total_sales'];
                                                     echo $total_purchase2 = isset($total_purchase) ? $total_purchase : "0";
                                                     ?>
                                                 </span>
@@ -133,10 +220,9 @@ LEFT JOIN
 ON 
     o.order_id = ord.order_id
 WHERE 
-    ord.order_date = '$current_date'
+    1=1 $date_select 
     "))['total_profit'];
                                                         $total_profit = isset($total_profit) ? $total_profit : 0;
-
                                                         echo  number_format($total_profit);
                                                         ?>
                                                     </span>
@@ -232,7 +318,7 @@ WHERE
         FROM 
             purchase    
         WHERE 
-            purchase_date = '$current_date'
+            1=1 $date_select 
     "))['total_purchases'];
                                                     $total_purchases = isset($total_purchases) ? $total_purchases : 0;
 
@@ -264,7 +350,7 @@ WHERE
         FROM 
             orders
         WHERE 
-            order_date = '$current_date'
+            1=1 $date_select 
     "))['total_orders'];
                                                     $total_orders = isset($total_orders) ? $total_orders : 0;
 
@@ -373,7 +459,7 @@ WHERE
                                                 <p class="text-muted mb-1">Today</p>
                                                 <h6 class="mb-1">
                                                     <?php
-                                                    @$total_sales = mysqli_fetch_assoc(mysqli_query($dbc, "SELECT sum(grand_total) as total_sales FROM orders where order_date='$current_date' "))['total_sales'];
+                                                    @$total_sales = mysqli_fetch_assoc(mysqli_query($dbc, "SELECT sum(grand_total) as total_sales FROM orders where 1=1 $date_select  "))['total_sales'];
                                                     $total = isset($total_sales) ? $total_sales : "0";
                                                     echo number_format($total);
                                                     ?>
@@ -382,18 +468,18 @@ WHERE
                                             </div>
                                             <div class="col-6 text-center mb-3">
                                                 <p class="text-muted mb-1">Yesterday</p>
-                                                <h6 class="mb-1"><?= getOrders($dbc, "WHERE order_date='$yesterday_date'", "grand_total") ?></h6>
+                                                <h6 class="mb-1"><?= getOrders($dbc, "WHERE 1=1 $date_select ", "grand_total") ?></h6>
                                                 <p class="text-muted"></p>
                                             </div>
 
                                             <div class="col-6 text-center border-right">
                                                 <p class="text-muted mb-1">This Week</p>
-                                                <h6 class="mb-1"><?= getOrders($dbc, "WHERE order_date BETWEEN '$start' AND '$end' ", "grand_total") ?></h6>
+                                                <h6 class="mb-1"><?= getOrders($dbc, "WHERE 1=1 $date_select  ", "grand_total") ?></h6>
                                                 <p class="text-muted mb-2"></p>
                                             </div>
                                             <div class="col-6 text-center">
                                                 <p class="text-muted mb-1">Last Week</p>
-                                                <h6 class="mb-1"><?= getOrders($dbc, "WHERE order_date BETWEEN '$start_week' AND '$end_week' ", "grand_total") ?></h6>
+                                                <h6 class="mb-1"><?= getOrders($dbc, "WHERE 1=1 $date_select  ", "grand_total") ?></h6>
                                                 <p class="text-muted"></p>
                                             </div>
                                         </div>
@@ -433,7 +519,7 @@ WHERE
             LEFT JOIN 
                 purchase_item pi ON oi.product_id = pi.product_id
             WHERE 
-                ord.order_date = '$current_date'
+                1=1 $date_select 
             GROUP BY 
                 ord.order_id
         ";
@@ -594,6 +680,55 @@ WHERE
                     </div>
         </main> <!-- main -->
     </div> <!-- .wrapper -->
+
+
+    <!--Modal: modalCookie-->
+    <div class="modal fade top" id="modalCookie1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true">
+        <div class="modal-dialog modal-frame modal-lg modal-top modal-notify modal-info" role="document">
+            <!--Content-->
+            <div class="modal-content">
+                <!--Body-->
+                <div class="modal-body">
+                    <form class="form-group" action="#" method="post">
+                        <div class="row my-3">
+                            <!-- Add date selection input fields or datepicker here -->
+                            <div class="col-md-12 col-sm-12 col-lg-4 col-xl-4">
+                                <!-- <input type="hidden" name=""> -->
+                                <label class="text-dark" for="start_date">Start Date</label>
+                                <input class="form-control" value="" type="date" id="start_date" name="start_date">
+                            </div>
+                            <div class="col-md-12 col-sm-12 col-lg-4 col-xl-4">
+                                <label class="text-dark" for="end_date">End Date</label>
+                                <input class="form-control" value="" type="date" id="end_date" name="end_date">
+                            </div>
+                            <div class="col-md-12 col-sm-12 col-lg-4 col-xl-4">
+                                <label class="text-dark" for="end_date">Order Date</label>
+                                <select name="orderdate" id="orderdate" class="form-control">
+                                    <option value="">Select</option>
+                                    <option value="today">Today</option>
+                                    <option value="yesterday">Yesterday</option>
+                                    <option value="last7days">Last 7 Days</option>
+                                    <option value="last30days">Last 30 Days</option>
+                                    <option value="thismonth">This Month</option>
+                                    <option value="lastmonth">Last Month</option>
+                                </select>
+                            </div>
+                            <div class=" py-3 d-flex align-items-end justify-content-end col-md-12 col-sm-12 col-lg-12 col-xl-12">
+                                <div>
+                                    <input class=" btn btn-success text-white waves-effect" type="submit" name="saleByDate" value="Filter Sale">
+                                </div>
+                                <div>
+                                    <a type="button" class="mx-2 btn btn-danger text-white waves-effect" data-dismiss="modal">Cancel</a>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!--/.Content-->
+        </div>
+    </div>
+    <!--Modal: modalCookie-->
     <script src="js/jquery.min.js"></script>
     <script src="js/popper.min.js"></script>
     <script src="js/moment.min.js"></script>
@@ -627,6 +762,15 @@ WHERE
     <script src='js/uppy.min.js'></script>
     <script src='js/quill.min.js'></script>
     <script>
+        $(document).ready(function() {
+            $(".filter_btn").hover(function() {
+                // Add "Filter by Date" text and icon
+                $(this).html('<i class="fa fa-filter"></i> Filter By Date');
+            }, function() {
+                // Remove text when mouse out
+                $(this).html('<i class="fa fa-filter"></i>');
+            });
+        });
         barChartjs = document.getElementById("barChar");
         barChartjs && new Chart(barChartjs, {
             type: "bar",
