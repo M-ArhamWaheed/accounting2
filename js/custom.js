@@ -619,13 +619,15 @@ $("#addProductPurchase").on("click", function () {
             <td>${name}</td>
             <td>${pro_details}</td>
             <td>${price}</td>
-            <td>${sale_price}</td>
+            ${sale_price ? `<td>${sale_price}</td>` : ""}
             <td>${Currentquantity}</td>
             <td>${total_price}</td>
             <td>
                 <button type="button" onclick="removeByid('#product_idN_${id}')" 
                         class="fa fa-trash text-danger"></button>
-                <button type="button" onclick="editByid(${id}, '${code}', '${pro_details}', '${price}','${sale_price}', '${product_quantity}')" 
+                <button type="button" onclick="editByid(${id}, '${code}', '${pro_details}', '${price}','${
+              sale_price ? `${sale_price}` : ""
+            }', '${product_quantity}')" 
                         class="fa fa-edit text-success"></button>
             </td>
         </tr>
@@ -652,13 +654,15 @@ $("#addProductPurchase").on("click", function () {
         <td>${name}</td>
         <td>${pro_details}</td>
         <td>${price}</td>
-        <td>${sale_price}</td>
+        ${sale_price ? `<td>${sale_price}</td>` : ""}
         <td>${product_quantity}</td>
         <td>${total_price}</td>
         <td>
             <button type="button" onclick="removeByid('#product_idN_${id}')" 
                     class="fa fa-trash text-danger"></button>
-            <button type="button" onclick="editByid(${id}, '${code}', '${pro_details}', '${price}','${sale_price}', '${product_quantity}')" 
+            <button type="button" onclick="editByid(${id}, '${code}', '${pro_details}', '${price}','${
+        sale_price ? `${sale_price}` : ""
+      }', '${product_quantity}')" 
                     class="fa fa-edit text-success"></button>
         </td>
     </tr>
