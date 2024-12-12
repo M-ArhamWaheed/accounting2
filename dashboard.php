@@ -47,7 +47,7 @@ $end_of_month = date('Y-m-t', strtotime($current_date));
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <button type="button" class="btn btn-sm"><span class="fe fe-refresh-ccw fe-16 text-muted"></span></button>
+                                        <button type="button" class="btn btn-sm" id="refresh" data-toggle="tooltip" data-placement="bottom" title="Refresh"><span class="fe fe-refresh-ccw fe-16 text-muted"></span></button>
                                         <button type="button" class="btn btn-sm mr-2"><span class="fe fe-filter fe-16 text-muted"></span></button>
                                     </div>
                                 </form>
@@ -213,17 +213,17 @@ WHERE
 
 
                             <div class="col-md-6 col-12 mb-4">
-                                <div class="card shadow border-0">
+                                <div class="card bg-primary shadow border-0">
                                     <div class="card-body">
                                         <div class="row align-items-center">
                                             <div class="col-3 text-center">
-                                                <span class="circle circle-sm bg-primary">
-                                                    <i class="fe fe-16 fe-shopping-cart text-white mb-0"></i>
+                                                <span class="circle circle-sm bg-white">
+                                                    <i class="fe fe-16 fe-shopping-cart text-default mb-0"></i>
                                                 </span>
                                             </div>
-                                            <div class="col pr-0">
-                                                <p class="small text-muted mb-0">Purchase Bill Quantity</p>
-                                                <span class="h3 mb-0 ">
+                                            <div class="col pr-0 text-white">
+                                                <p class="small  mb-0">Purchase Bill Quantity</p>
+                                                <span class="h3 mb-0 text-white">
                                                     <?php
                                                     // Count today's total purchases
                                                     @$total_purchases = mysqli_fetch_assoc(mysqli_query($dbc, "
@@ -245,17 +245,17 @@ WHERE
                                 </div>
                             </div>
                             <div class="col-md-6 col-12 mb-4">
-                                <div class="card shadow border-0">
+                                <div class="card bg-primary shadow border-0">
                                     <div class="card-body">
                                         <div class="row align-items-center">
                                             <div class="col-3 text-center">
-                                                <span class="circle circle-sm bg-primary">
-                                                    <i class="fe fe-16 fe-shopping-cart text-white mb-0"></i>
+                                                <span class="circle circle-sm bg-white">
+                                                    <i class="fe fe-16 fe-shopping-cart text-default mb-0"></i>
                                                 </span>
                                             </div>
                                             <div class="col pr-0">
-                                                <p class="small text-muted mb-0">Sale Bill Quantity</p>
-                                                <span class="h3 mb-0 ">
+                                                <p class="small  text-white mb-0">Sale Bill Quantity</p>
+                                                <span class="h3 mb-0 text-white">
                                                     <?php
                                                     // Count today's total orders
                                                     @$total_orders = mysqli_fetch_assoc(mysqli_query($dbc, "
@@ -801,6 +801,12 @@ WHERE
                 console.log('Upload complete! We’ve uploaded these files:', result.successful)
             });
         }
+
+        $(document).ready(function() {
+            $("#refresh").on('click', function() {
+                location.reload();
+            })
+        });
     </script>
     <script src="js/apps.js"></script>
 </body>

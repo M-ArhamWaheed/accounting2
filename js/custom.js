@@ -162,7 +162,6 @@ $(document).ready(function () {
     e.preventDefault();
     var form = $(this);
     var fd = new FormData(this);
-    var files = $("#product_image")[0].files[0];
 
     $.ajax({
       url: form.attr("action"),
@@ -176,12 +175,7 @@ $(document).ready(function () {
       },
       success: function (response) {
         console.log("click");
-        if (response.sts == "success") {
-          $("#add_product_fm").each(function () {
-            this.reset();
-            location.reload();
-          });
-        }
+        sweeetalert(response.msg, response.sts, 1500);
         $("#add_product_btn").prop("disabled", false);
         var product_add_from = $("#product_add_from").val();
         if (product_add_from == "modal") {
@@ -190,7 +184,12 @@ $(document).ready(function () {
         }
 
         console.log(response.sts);
-        sweeetalert(response.msg, response.sts, 1500);
+        if (response.sts == "success") {
+          $("#add_product_fm").each(function () {
+            this.reset();
+            location.reload();
+          });
+        }
       },
     }); //ajax call
   }); //main

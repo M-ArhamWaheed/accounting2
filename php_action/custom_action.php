@@ -380,8 +380,8 @@ if (!empty($_REQUEST['action']) and $_REQUEST['action'] == "product_module") {
 		if (insert_data($dbc, "product", $data_array)) {
 			$last_id = mysqli_insert_id($dbc);
 
-			if ($_FILES['product_image']['tmp_name']) {
-				upload_pic($_FILES['product_image'], '../img/uploads/');
+			if (@$_FILES['product_image']['tmp_name']) {
+				upload_pic(@$_FILES['product_image'], '../img/uploads/');
 				$product_image = $_SESSION['pic_name'];
 				$data_image = [
 					'product_image' => $product_image,

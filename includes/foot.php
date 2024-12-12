@@ -135,11 +135,7 @@
                    <button type="button" class="btn btn-danger btn-sm mt-4" style="display: none;" id="cancelBrandBtn">Cancel</button>
                  </div>
                </div>
-               <div class="col-sm-3 mt-3">
-                 <label>Product Image</label>
-                 <input type="file" class="form-control" id="product_image" name="product_image" accept="image/*">
-               </div>
-               <div class="col-sm-4 mt-3 mb-sm-0">
+               <div class="col-sm-7 mt-3 mb-sm-0">
                  <label for="">Product Description</label>
 
                  <textarea class="form-control" name="product_description" placeholder="Product Description"><?= @$fetchproduct['product_description'] ?></textarea>

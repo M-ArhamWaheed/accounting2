@@ -109,11 +109,6 @@ $btn_name = isset($_REQUEST['edit_product_id']) ? "Update" : "Add";
                     <label for="">Product Alert on Quantity</label>
                     <input type="text" required class="form-control" value="<?= (empty($fetchproduct)) ? 5 : $fetchproduct['alert_at'] ?>" id="alert_at" placeholder="Product Stock Alert" name="alert_at">
                   </div>
-                  <div class="col-sm-3 mt-3">
-                    <label>Product Image</label>
-
-                    <input type="file" class="form-control" id="product_image" name="product_image" accept="image/*">
-                  </div>
                   <div class="col-sm-3 mt-3 mb-sm-0">
                     <label for="">Product Description</label>
 
