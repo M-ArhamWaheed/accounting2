@@ -46,6 +46,12 @@ for ($i = 0; $i < 2; $i++) :
 ?>
 
     <style>
+        header,
+        main,
+        footer {
+            font-family: "Poppins", sans-serif !important;
+        }
+
         table {
             width: 100%;
         }
@@ -97,8 +103,8 @@ for ($i = 0; $i < 2; $i++) :
                 <p class="m-0 pb-1">Date : <?php echo $date = date('D d-M-Y h:i A', strtotime($order['timestamp'] . " +10 hours")); ?></p>
             </div>
             <div class="col-8 d-flex  flex-column align-items-end">
-                <h4>TOTAL DUE</h4>
-                <h2>PKR <?= $order['grand_total'] ?></h2>
+                <h5>Bill No: <?= $order['bill_no'] ?></h5>
+                <h2>Total: PKR <?= $order['grand_total'] ?></h2>
             </div>
 
             <!-- Table -->
