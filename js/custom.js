@@ -127,18 +127,20 @@ $(document).ready(function () {
             confirmButtonText: `Print`,
             denyButtonText: `Add New`,
           }).then((result) => {
-            /* Read more about isConfirmed, isDenied below */
             if (result.isConfirmed) {
-              location.reload();
-
+              // Open the invoice in a new tab
               window.open(
-                "print_sale.php?id=" +
+                "invoice.php?id=" +
                   response.order_id +
                   "&type=" +
                   response.type,
                 "_blank"
               );
+
+              // Reload the current page after opening the invoice
+              location.reload();
             } else if (result.isDenied) {
+              // Simply reload the page for "Add New"
               location.reload();
             }
           });
