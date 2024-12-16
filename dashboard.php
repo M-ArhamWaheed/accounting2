@@ -74,6 +74,28 @@ if (isset($_REQUEST['orderdate']) && $_REQUEST['orderdate'] !== '') {
 
     $date_select = " AND DATE_FORMAT(timestamp, '%Y-%m-%d') = '" . date('Y-m-d') . "'";
 }
+
+
+
+// Total Profit
+// Calculate today's total profit
+@$total_profit = mysqli_fetch_assoc(mysqli_query($dbc, "
+     SELECT 
+    COALESCE(SUM((o.rate - p.rate) * o.quantity), 0) AS total_profit
+FROM 
+    order_item o
+LEFT JOIN 
+    purchase_item p 
+ON 
+    o.product_id = p.product_id
+LEFT JOIN 
+    orders ord 
+ON 
+    o.order_id = ord.order_id
+WHERE 
+    1=1 $date_select 
+    "))['total_profit'];
+$total_profit = isset($total_profit) ? $total_profit : 0;
 ?>
 <style>
     .table-card {
@@ -159,7 +181,7 @@ if (isset($_REQUEST['orderdate']) && $_REQUEST['orderdate'] !== '') {
                                                     @$total_sales = mysqli_fetch_assoc(mysqli_query($dbc, "SELECT sum(grand_total) as total_sales , timestamp FROM orders where 1=1  $date_select "))['total_sales'];
                                                     // echo "SELECT sum(grand_total) as total_sales , timestamp FROM orders where 1=1 $date_select ";
                                                     $total = isset($total_sales) ? $total_sales : "0";
-                                                    echo number_format($total);
+                                                    echo number_format($total - $total_profit);
                                                     ?>
                                                 </span>
                                                 <!--   <span class="small text-white">+5.5%</span> -->
@@ -205,24 +227,7 @@ if (isset($_REQUEST['orderdate']) && $_REQUEST['orderdate'] !== '') {
                                                 <span class="h3 mb-0 text-white">
                                                     <span class="h3 mb-0 text-white">
                                                         <?php
-                                                        // Calculate today's total profit
-                                                        @$total_profit = mysqli_fetch_assoc(mysqli_query($dbc, "
-     SELECT 
-    COALESCE(SUM((o.rate - p.rate) * o.quantity), 0) AS total_profit
-FROM 
-    order_item o
-LEFT JOIN 
-    purchase_item p 
-ON 
-    o.product_id = p.product_id
-LEFT JOIN 
-    orders ord 
-ON 
-    o.order_id = ord.order_id
-WHERE 
-    1=1 $date_select 
-    "))['total_profit'];
-                                                        $total_profit = isset($total_profit) ? $total_profit : 0;
+
                                                         echo  number_format($total_profit);
                                                         ?>
                                                     </span>
