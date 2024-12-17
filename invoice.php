@@ -191,3 +191,7 @@ for ($i = 0; $i < 2; $i++) :
 endfor;
 include("./includes/foot.php");
 ?>
+
+<script type="text/javascript">
+    window.print();
+</script>
