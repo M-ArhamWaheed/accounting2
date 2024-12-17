@@ -139,8 +139,6 @@ $(document).ready(function () {
               setTimeout(() => {
                 location.reload();
               }, 2000); // Adjust delay as needed
-
-              // Delay the reload of the current page
             } else if (result.isDenied) {
               // Reload the page for "Add New"
               location.reload();
