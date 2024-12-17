@@ -75,27 +75,31 @@ if (isset($_REQUEST['orderdate']) && $_REQUEST['orderdate'] !== '') {
     $date_select = " AND DATE_FORMAT(timestamp, '%Y-%m-%d') = '" . date('Y-m-d') . "'";
 }
 
+$salesGet = mysqli_query($dbc, "SELECT * FROM orders WHERE 1=1 $date_select ");
+$total_profit = 0;
+while ($fetchOrder = mysqli_fetch_assoc($salesGet)): ?>
+<?php
+    $sql = "SELECT * FROM order_item WHERE order_id = '$fetchOrder[order_id]' AND order_item_status=1";
+    $query = $dbc->query($sql);
+    while ($result = $query->fetch_assoc()) {
+        $product_id = $result['product_id'];
+        $sold_quantity = $result['quantity'];
+        $sold_rate = $result['rate'];
+        //$purchases_items ="SELECT * FROM purchase_item WHERE purchase_id=  ";
+        $sql_item = "SELECT * FROM purchase_item WHERE product_id = '$product_id'";
+        $query_item = $dbc->query($sql_item);
+        while ($result_item = $query_item->fetch_assoc()) {
+            $product_purchase = $result_item['rate'];
+            $sold_income = $sold_quantity * $sold_rate;
+            $purchase_income = $product_purchase * $sold_quantity;
+        }
+        $total_profit += @$sold_income - @$purchase_income;
+    } //while
+//echo $net_profit;
+endwhile;
 
 
-// Total Profit
-// Calculate today's total profit
-@$total_profit = mysqli_fetch_assoc(mysqli_query($dbc, "
-     SELECT 
-    COALESCE(SUM((o.rate - p.rate) * o.quantity), 0) AS total_profit
-FROM 
-    order_item o
-LEFT JOIN 
-    purchase_item p 
-ON 
-    o.product_id = p.product_id
-LEFT JOIN 
-    orders ord 
-ON 
-    o.order_id = ord.order_id
-WHERE 
-    1=1 $date_select 
-    "))['total_profit'];
-$total_profit = isset($total_profit) ? $total_profit : 0;
+
 ?>
 <style>
     .table-card {

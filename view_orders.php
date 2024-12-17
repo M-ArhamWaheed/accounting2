@@ -93,7 +93,7 @@
                       <?php endif; ?>
 
 
-                      <a target="_blank" href="invoice.php?type=order&id=<?= $r['order_id'] ?>" class="btn btn-admin2 btn-sm m-1">Print</a>
+                      <a target="_blank" href="<?= $get_company['print_url'] ?>?type=order&id=<?= $r['order_id'] ?>" class="btn btn-admin2 btn-sm m-1">Print</a>
                       <a target="_blank" href=" print_gatepass.php?type=order&id=<?= $r['order_id'] ?>" class="btn btn-admin2 btn-sm my-1">Gatepass</a>
                     </td>
                   </tr>

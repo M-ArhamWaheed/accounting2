@@ -75,7 +75,7 @@
                       <?php endif; ?>
 
 
-                      <a target="_blank" href="invoice.php?id=<?= $r['purchase_id'] ?>&type=purchase" class="btn btn-admin2 btn-sm m-1">Print</a>
+                      <a target="_blank" href="<?= $get_company['print_url'] ?>?id=<?= $r['purchase_id'] ?>&type=purchase" class="btn btn-admin2 btn-sm m-1">Print</a>
                     </td>
                   </tr>
                 <?php  } ?>
