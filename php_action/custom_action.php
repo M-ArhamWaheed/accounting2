@@ -712,7 +712,7 @@ if (isset($_REQUEST['sale_order_client_name'])) {
 		$msg = "Please Add Any Product";
 		$sts = 'error';
 	}
-	echo json_encode(['msg' => $msg, 'sts' => $sts, 'order_id' => @$last_id, 'type' => "order", 'subtype' => $_REQUEST['payment_type']]);
+	echo json_encode(['msg' => $msg, 'sts' => $sts, 'order_id' => @$last_id, 'type' => "order", 'subtype' => $_REQUEST['payment_type'], 'print_url' => $get_company['print_url']]);
 }
 /*---------------------- credit sale-order   -------------------------------------------------------------------*/
 if (isset($_REQUEST['credit_order_client_name'])) {
@@ -1201,7 +1201,7 @@ if (isset($_REQUEST['cash_purchase_supplier'])) {
 		$msg = "Please Add Any Product";
 		$sts = 'error';
 	}
-	echo json_encode(['msg' => $msg, 'sts' => $sts, 'order_id' => @$last_id, 'type' => "purchase", 'subtype' => $_REQUEST['payment_type']]);
+	echo json_encode(['msg' => $msg, 'sts' => $sts, 'order_id' => @$last_id, 'type' => "purchase", 'subtype' => $_REQUEST['payment_type'], 'print_url' => $get_company['print_url']]);
 }
 /*---------------------- credit Purchase-order  end -------------------------------------------------------------------*/
 if (isset($_REQUEST['get_products_code'])) {

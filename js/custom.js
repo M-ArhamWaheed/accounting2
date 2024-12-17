@@ -129,18 +129,21 @@ $(document).ready(function () {
           }).then((result) => {
             if (result.isConfirmed) {
               // Open the invoice in a new tab
+              setTimeout(() => {
+                location.reload();
+              }, 2000); // Adjust delay as needed
               window.open(
-                "invoice.php?id=" +
+                response.print_url +
+                  "?id=" +
                   response.order_id +
                   "&type=" +
                   response.type,
                 "_blank"
               );
 
-              // Reload the current page after opening the invoice
-              location.reload();
+              // Delay the reload of the current page
             } else if (result.isDenied) {
-              // Simply reload the page for "Add New"
+              // Reload the page for "Add New"
               location.reload();
             }
           });

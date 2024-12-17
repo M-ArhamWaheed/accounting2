@@ -18,6 +18,7 @@ if (isset($_REQUEST['company_submit'])) {
 			'address' => $_POST['address'],
 			'company_phone' => $_POST['company_phone'],
 			'personal_phone' => $_POST['personal_phone'],
+			'print_url' => $_POST['print_url'],
 			'email' => $_POST['email'],
 			'stock_manage' => $_POST['stock_manage'],
 			'sale_interface' => $_POST['sale_interface']
@@ -28,6 +29,7 @@ if (isset($_REQUEST['company_submit'])) {
 			'address' => $_POST['address'],
 			'company_phone' => $_POST['company_phone'],
 			'personal_phone' => $_POST['personal_phone'],
+			'print_url' => $_POST['print_url'],
 			'email' => $_POST['email'],
 			'stock_manage' => $_POST['stock_manage'],
 			'sale_interface' => $_POST['sale_interface']
@@ -59,6 +61,7 @@ if (isset($_POST['company_update'])) {
 			'address' => $_POST['address'],
 			'company_phone' => $_POST['company_phone'],
 			'personal_phone' => $_POST['personal_phone'],
+			'print_url' => $_POST['print_url'],
 			'email' => $_POST['email'],
 			'stock_manage' => $_POST['stock_manage'],
 			'sale_interface' => $_POST['sale_interface']
@@ -68,6 +71,7 @@ if (isset($_POST['company_update'])) {
 			'name' => $_POST['name'],
 			'address' => $_POST['address'],
 			'company_phone' => $_POST['company_phone'],
+			'print_url' => $_POST['print_url'],
 			'personal_phone' => $_POST['personal_phone'],
 			'email' => $_POST['email'],
 			'stock_manage' => $_POST['stock_manage'],
