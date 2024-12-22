@@ -32,7 +32,7 @@
              <input type="hidden" name="payment_type" id="payment_type" value="cash_in_hand">
 
              <div class="row form-group">
-               <div class="col-md-1">
+               <div class="col-md-1 ml-auto">
                  <label>Order ID#</label>
                  <?php $result = mysqli_query($dbc, "
     SHOW TABLE STATUS LIKE 'orders'
@@ -46,7 +46,7 @@
 
                  <input type="text" name="order_date" id="order_date" value="<?= @empty($_REQUEST['edit_order_id']) ? date('Y-m-d') : $fetchOrder['order_date'] ?>" readonly class="form-control">
                </div>
-               <div class="col-md-2">
+               <div class="col-md-1">
                  <label>Bill No</label>
                  <input type="text" name="bill_no" autocomplete="off" id="get_bill_no" value="<?= @$fetchOrder['bill_no'] ?>" class="form-control">
                </div>
@@ -63,7 +63,7 @@
 
                  </datalist>
                </div>
-               <div class="col-sm-2">
+               <div class="col-sm-2 mr-auto">
                  <label>Customer Name</label>
                  <input type="text" id="sale_order_client_name" value="<?= @$fetchOrder['client_name'] ?>" class="form-control" autocomplete="off" name="sale_order_client_name" list="client_name" required>
                  <datalist id="client_name">
@@ -75,30 +75,13 @@
                    <?php   } ?>
                  </datalist>
                </div>
-               <div class="col-sm-1">
-                 <label>Vehicle NO </label>
-                 <input type="text" id="vehicle_no" value="<?= @$fetchOrder['vehicle_no'] ?>" class="form-control" autocomplete="off" name="vehicle_no" list="vehicle_no_list">
-                 <datalist id="vehicle_no_list">
-                   <?php
-                    $q = mysqli_query($dbc, "SELECT DISTINCT vehicle_no FROM orders");
-                    while ($r = mysqli_fetch_assoc($q)) {
-                    ?>
-                     <option value="<?= $r['vehicle_no'] ?>"><?= $r['vehicle_no'] ?></option>
-                   <?php   } ?>
-                 </datalist>
-               </div>
-               <div class="col-md-2">
-                 <label>Comment </label>
-
-                 <input type="text" autocomplete="off" name="order_narration" id="order_narration" value="<?= @$fetchOrder['order_narration'] ?>" class="form-control">
-               </div>
              </div> <!-- end of form-group -->
-             <div class="form-group row">
-               <div class="col-6 col-md-2">
+             <div class="form-group row mt-5 mb-5">
+               <div class="col-6 col-md-2 ml-auto">
                  <label>Product Code</label>
                  <input type="text" name="product_code" autocomplete="off" id="get_product_code" class="form-control">
                </div>
-               <div class="col-6 col-md-2">
+               <div class="col-6 col-md-3">
                  <label>Products</label>
                  <input type="hidden" id="add_pro_type" value="add">
                  <select class="form-control searchableSelect" id="get_product_name" name="product_id">
@@ -118,10 +101,6 @@
                  <span class="text-center w-100" id="instockQty"></span>
                </div>
                <div class="col-6 col-sm-2 col-md-2">
-                 <label>Product Details</label>
-                 <input type="text" class="form-control" id="get_product_detail">
-               </div>
-               <div class="col-6 col-sm-2 col-md-2">
                  <label>Price</label>
                  <input type="number" min="0" class="form-control" id="get_product_price">
                </div>
@@ -130,7 +109,7 @@
                  <input type="number" data-max="" class="form-control" id="get_product_quantity" value="1" min="1" name="quantity">
 
                </div>
-               <div class="col-sm-1">
+               <div class="col-sm-1 mr-auto">
                  <br>
                  <button type="button" class="btn btn-success btn-sm mt-2 float-right" id="addProductPurchase"><i class="fa fa-plus"></i> <b>Add</b></button>
                </div>
@@ -144,7 +123,6 @@
                      <tr>
                        <th>Code</th>
                        <th>Product Name</th>
-                       <th>Product Details</th>
                        <th>Unit Price</th>
                        <th>Quantity</th>
                        <th>Total Price</th>
@@ -162,12 +140,10 @@
                            <input type="hidden" data-price="<?= $r['rate'] ?>" data-quantity="<?= $r['quantity'] ?>" id="product_ids_<?= $r['product_id'] ?>" class="product_ids" name="product_ids[]" value="<?= $r['product_id'] ?>">
                            <input type="hidden" data-price="<?= $r['rate'] ?>" data-quantity="<?= $r['quantity'] ?>" id="product_ids_<?= $r['product_id'] ?>" class="product_ids" name="product_ids[]" value="<?= $r['product_id'] ?>">
                            <input type="hidden" id="product_quantites_<?= $r['product_id'] ?>" name="product_quantites[]" value="<?= $r['quantity'] ?>">
-                           <input type="hidden" id="product_detail_<?= $r['product_id'] ?>" name="product_detail[]" value="<?= $r['product_detail'] ?>">
                            <input type="hidden" id="product_rate_<?= $r['product_id'] ?>" name="product_rates[]" value="<?= $r['rate'] ?>">
                            <input type="hidden" id="product_totalrate_<?= $r['product_id'] ?>" name="product_totalrates[]" value="<?= $r['rate'] ?>">
                            <td><?= $r['product_code'] ?></td>
                            <td><?= $r['product_name'] ?></td>
-                           <td><?= $r['product_detail'] ?></td>
                            <td><?= $r['rate'] ?></td>
                            <td><?= $r['quantity'] ?></td>
                            <td><?= (float)$r['rate'] * (float)$r['quantity'] ?></?>
@@ -185,7 +161,7 @@
 
                    <tfoot>
                      <tr>
-                       <td colspan="3"></td>
+                       <td colspan="2"></td>
 
                        <td class="table-bordered"> Sub Total :</td>
                        <td class="table-bordered" id="product_total_amount"><?= @$fetchOrder['total_amount'] ?></td>
@@ -208,7 +184,7 @@
                        </td>
                      </tr>
                      <tr>
-                       <td colspan="3" class="border-none"></td>
+                       <td colspan="2" class="border-none"></td>
                        <td class="table-bordered"> <strong>Grand Total :</strong> </td>
                        <td class="table-bordered" id="product_grand_total_amount"><?= @$fetchOrder['grand_total'] ?></td>
                        <td class="table-bordered">Paid :</td>
@@ -230,7 +206,7 @@
                        </td>
                      </tr>
                      <tr>
-                       <td colspan="3" class="border-none"></td>
+                       <td colspan="2" class="border-none"></td>
                        <td class="table-bordered">Remaing Amount :</td>
                        <td class="table-bordered"><input type="number" class="form-control form-control-sm" id="remaining_ammount" readonly name="remaining_ammount" value="<?= @$fetchOrder['due'] ?>">
                        </td>
