@@ -625,9 +625,7 @@ $("#addProductPurchase").on("click", function () {
             <td>
                 <button type="button" onclick="removeByid('#product_idN_${id}')" 
                         class="fa fa-trash text-danger"></button>
-                <button type="button" onclick="editByid(${id}, '${code}', '${price}','${
-              sale_price ? `${sale_price}` : ""
-            }', '${product_quantity}')" 
+                <button type="button" onclick="editByid(${id}, '${code}', '${price}', '${product_quantity}')" 
                         class="fa fa-edit text-success"></button>
             </td>
         </tr>
@@ -658,9 +656,7 @@ $("#addProductPurchase").on("click", function () {
         <td>
             <button type="button" onclick="removeByid('#product_idN_${id}')" 
                     class="fa fa-trash text-danger"></button>
-            <button type="button" onclick="editByid(${id}, '${code}', '${price}','${
-        sale_price ? `${sale_price}` : ""
-      }', '${product_quantity}')" 
+            <button type="button" onclick="editByid(${id}, '${code}', '${price}', '${product_quantity}')" 
                     class="fa fa-edit text-success"></button>
         </td>
     </tr>
@@ -723,13 +719,12 @@ function getOrderTotal() {
 
   getRemaingAmount();
 }
-function editByid(id, code, price, sale_price, qty) {
+function editByid(id, code, price, qty) {
   // alert(pro_details);
   $(".searchableSelect").val(id);
 
   $("#get_product_code").val(code);
   $("#get_product_quantity").val(qty);
-  $("#get_product_sale_price").val(sale_price);
   $("#add_pro_type").val("update");
 
   var effect = function () {

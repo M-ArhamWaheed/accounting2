@@ -76,7 +76,7 @@
                  </datalist>
                </div>
              </div> <!-- end of form-group -->
-             <div class="form-group row mt-5 mb-5">
+             <div class="form-group row mt-3 mb-5">
                <div class="col-6 col-md-2 ml-auto">
                  <label>Product Code</label>
                  <input type="text" name="product_code" autocomplete="off" id="get_product_code" class="form-control">
@@ -151,7 +151,7 @@
                            <td>
 
                              <button type="button" onclick="removeByid(`#product_idN_<?= $r['product_id'] ?>`)" class="fa fa-trash text-danger" href="#"></button>
-                             <button type="button" onclick="editByid(<?= $r['product_id'] ?>,`<?= $r['product_code'] ?>`,`<?= $r['product_detail'] ?>`,<?= $r['rate'] ?>,<?= $r['quantity'] ?>)" class="fa fa-edit text-success ml-2 "></button>
+                             <button type="button" onclick="editByid(<?= $r['product_id'] ?>,`<?= $r['product_code'] ?>`,<?= $r['rate'] ?>,<?= $r['quantity'] ?>)" class="fa fa-edit text-success ml-2 "></button>
 
                            </td>
                          </tr>
