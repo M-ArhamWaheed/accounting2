@@ -1162,3 +1162,45 @@ function setAmountPaid(id, paid) {
     }
   });
 }
+
+// Chnage Balance Colors
+function updateBalance(balance, elementId) {
+  const $balanceSpan = $(`#${elementId}`);
+
+  // Update the class based on the balance value
+  if (balance >= 0) {
+    $balanceSpan.removeClass("text-danger").addClass("text-success");
+  } else {
+    $balanceSpan.removeClass("text-success").addClass("text-danger");
+  }
+}
+
+// Function to set up a MutationObserver for a specific element
+function observeBalanceChange(elementId) {
+  const targetNode = document.getElementById(elementId);
+
+  if (targetNode) {
+    const observer = new MutationObserver(() => {
+      const newBalance = parseFloat(targetNode.textContent); // Get the updated balance
+      if (!isNaN(newBalance)) {
+        updateBalance(newBalance, elementId); // Call the function with the updated value
+      }
+    });
+
+    // Configure the observer
+    observer.observe(targetNode, {
+      childList: true,
+      subtree: true,
+    });
+  } else {
+    console.error(`Element with ID '${elementId}' not found.`);
+  }
+}
+
+// Observe changes for the required elements
+observeBalanceChange("customer_account_exp");
+observeBalanceChange("to_account_bl");
+observeBalanceChange("from_account_bl");
+observeBalanceChange("from_account_exp");
+observeBalanceChange("to_account_exp");
+observeBalanceChange("account_sing");

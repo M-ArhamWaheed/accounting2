@@ -62,7 +62,12 @@ if (!empty($_REQUEST['edit_purchase_id'])) {
                     <?php   } ?>
                   </select>
                   <div class="input-group-prepend">
-                    <span class="input-group-text" id="basic-addon1">Balance : <span id="customer_account_exp">0</span> </span>
+                    <!-- HTML -->
+                    <div class="input-group">
+                      <span class="input-group-text" id="basic-addon1">
+                        Balance : <span id="customer_account_exp" class="text-danger">0</span>
+                      </span>
+                    </div>
                   </div>
                 </div>
                 <input type="hidden" name="customer_account" id="customer_account" value="<?= @$fetchPurchase['customer_account'] ?>">
