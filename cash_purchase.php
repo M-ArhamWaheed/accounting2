@@ -27,7 +27,7 @@ if (!empty($_REQUEST['edit_purchase_id'])) {
 
         </div>
         <div class="card-body">
-          <form action="php_action/custom_action.php" method="POST" id="sale_order_fm">
+          <form action="php_action/custom_action.php" enctype="multipart/form-data" method="POST" id="sale_order_fm">
             <input type="hidden" name="product_purchase_id" value="<?= @empty($_REQUEST['edit_purchase_id']) ? "" : base64_decode($_REQUEST['edit_purchase_id']) ?>">
             <input type="hidden" name="payment_type" id="payment_type" value="cash_purchase">
             <div class="row form-group">
@@ -45,7 +45,7 @@ if (!empty($_REQUEST['edit_purchase_id'])) {
 
                 <input type="text" name="purchase_date" id="purchase_date" value="<?= @empty($_REQUEST['edit_purchase_id']) ? date('Y-m-d') : $fetchPurchase['purchase_date'] ?>" readonly class="form-control">
               </div>
-              <div class="col-md-1">
+              <div class="col-md-2">
                 <label>Bill No</label>
                 <input type="text" name="bill_no" autocomplete="off" id="get_bill_no" value="<?= @$fetchOrder['bill_no'] ?>" class="form-control">
               </div>
@@ -71,11 +71,14 @@ if (!empty($_REQUEST['edit_purchase_id'])) {
                 <input type="hidden" name="client_contact" id="client_contact" value="<?= @$fetchPurchase['client_contact'] ?>">
 
               </div>
-              <div class="col-sm-1 mr-auto">
+              <div class="col-sm-1">
                 <br>
                 <a href="customers.php?type=supplier" class="btn btn-admin2 btn-sm mt-2">Add</a>
               </div>
-
+              <div class="col-md-2 mr-auto">
+                <label>Bill Image</label>
+                <input type="file" name="upload_file" autocomplete="off" id="upload_file" value="<?= @$fetchPurchase['bill_image'] ?>" class="form-control">
+              </div>
             </div> <!-- end of form-group -->
             <div class="form-group row">
               <div class="col-4 col-md-1 ml-auto">

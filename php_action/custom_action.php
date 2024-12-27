@@ -967,7 +967,7 @@ if (isset($_REQUEST['getProductDetailsBycode'])) {
 	echo json_encode($product);
 }
 /*---------------------- cash purchase   -------------------------------------------------------------------*/
-if (isset($_REQUEST['cash_purchase_supplier'])) {
+if (isset($_POST['cash_purchase_supplier'])) {
 	if (!empty($_REQUEST['product_ids'])) {
 		# code...
 		$total_ammount = $total_grand = 0;
@@ -990,6 +990,22 @@ if (isset($_REQUEST['cash_purchase_supplier'])) {
 
 			if (insert_data($dbc, 'purchase', $data)) {
 				$last_id = mysqli_insert_id($dbc);
+
+				if (@$_FILES['upload_file']['tmp_name']) {
+					$tmp_name = @$_FILES['upload_file']['tmp_name'];
+					$extension = pathinfo(@$_FILES['upload_file']['name'], PATHINFO_EXTENSION);
+					$unique_name = uniqid('img_', true) . '.' . $extension;
+					$path =  $unique_name;
+
+					if (move_uploaded_file($tmp_name, '../img/uploads/' . $path)) {
+						$data_image = [
+							'bill_image' => $path,
+						];
+						update_data($dbc, "purchase", $data_image, "purchase_id", $last_id);
+					} else {
+						echo 'file not uploaded';
+					}
+				}
 
 				$x = 0;
 				foreach ($_REQUEST['product_ids'] as $key => $value) {

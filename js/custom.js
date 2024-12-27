@@ -98,11 +98,15 @@ $(document).ready(function () {
   }); //main
   $("#sale_order_fm").on("submit", function (e) {
     e.preventDefault();
-    var form = $("#sale_order_fm");
+    var form = $("#sale_order_fm")[0]; // Get the form element
+    var formData = new FormData(form); // Create FormData object
+
     $.ajax({
       type: "POST",
-      url: form.attr("action"),
-      data: form.serialize(),
+      url: $(form).attr("action"),
+      data: formData,
+      processData: false, // Prevent jQuery from automatically transforming the data into a query string
+      contentType: false, // Tell jQuery not to set the `Content-Type` header
       dataType: "json",
       beforeSend: function () {
         $("#sale_order_print").prop("disabled", true);
@@ -117,9 +121,6 @@ $(document).ready(function () {
           $("#product_grand_total_amount").html("");
           $("#product_total_amount").html("");
 
-          // 	window.location.assign('print_order.php?order_id='+response.order_id);
-
-          //$("#tableData").load(location.href+" #tableData");
           Swal.fire({
             title: response.msg,
             showDenyButton: true,
@@ -144,15 +145,14 @@ $(document).ready(function () {
               location.reload();
             }
           });
-        }
-        if (response.sts == "error") {
+        } else if (response.sts == "error") {
           sweeetalert(response.msg, response.sts, 1500);
         }
         $("#sale_order_btn").prop("disabled", false);
-        //
       },
     }); //ajax call
-  }); //main
+  });
+  //main
   $("#credit_order_client_name").on("change", function () {
     var value = $("#credit_order_client_name :selected").data("id");
     var contact = $("#credit_order_client_name :selected").data("contact");
