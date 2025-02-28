@@ -34,7 +34,7 @@
                     </tr>
                   </thead>
                   <tbody> 
-                      <?php   $q=mysqli_query($dbc,"SELECT * FROM orders WHERE payment_type='cash_in_hand'");
+                      <?php   $q=mysqli_query($dbc,"SELECT * FROM orders");
                       $c=0;
                         while ($r=mysqli_fetch_assoc($q)) { $c++;
                      
