@@ -98,11 +98,15 @@ $(document).ready(function () {
   }); //main
   $("#sale_order_fm").on("submit", function (e) {
     e.preventDefault();
-    var form = $("#sale_order_fm");
+    var form = $("#sale_order_fm")[0]; // Get the form element
+    var formData = new FormData(form); // Create FormData object
+
     $.ajax({
       type: "POST",
-      url: form.attr("action"),
-      data: form.serialize(),
+      url: $(form).attr("action"),
+      data: formData,
+      processData: false, // Prevent jQuery from automatically transforming the data into a query string
+      contentType: false, // Tell jQuery not to set the `Content-Type` header
       dataType: "json",
       beforeSend: function () {
         $("#sale_order_print").prop("disabled", true);
@@ -117,9 +121,6 @@ $(document).ready(function () {
           $("#product_grand_total_amount").html("");
           $("#product_total_amount").html("");
 
-          // 	window.location.assign('print_order.php?order_id='+response.order_id);
-
-          //$("#tableData").load(location.href+" #tableData");
           Swal.fire({
             title: response.msg,
             showDenyButton: true,
@@ -127,30 +128,31 @@ $(document).ready(function () {
             confirmButtonText: `Print`,
             denyButtonText: `Add New`,
           }).then((result) => {
-            /* Read more about isConfirmed, isDenied below */
             if (result.isConfirmed) {
-              location.reload();
-
+              // Open the invoice in a new tab
               window.open(
-                "print_sale.php?id=" +
+                response.print_url +
+                  "?id=" +
                   response.order_id +
                   "&type=" +
-                  response.type,
-                "_blank"
+                  response.type
               );
+              setTimeout(() => {
+                location.reload();
+              }, 2000); // Adjust delay as needed
             } else if (result.isDenied) {
+              // Reload the page for "Add New"
               location.reload();
             }
           });
-        }
-        if (response.sts == "error") {
+        } else if (response.sts == "error") {
           sweeetalert(response.msg, response.sts, 1500);
         }
         $("#sale_order_btn").prop("disabled", false);
-        //
       },
     }); //ajax call
-  }); //main
+  });
+  //main
   $("#credit_order_client_name").on("change", function () {
     var value = $("#credit_order_client_name :selected").data("id");
     var contact = $("#credit_order_client_name :selected").data("contact");
@@ -611,13 +613,11 @@ $("#addProductPurchase").on("click", function () {
             <input type="hidden" data-price="${price}" data-quantity="${Currentquantity}" 
                    id="product_ids_${id}" class="product_ids" name="product_ids[]" value="${id}">
             <input type="hidden" id="product_quantites_${id}" name="product_quantites[]" value="${product_quantity}">
-            <input type="hidden" id="product_detail_${id}" name="product_detail[]" value="${pro_details}">
             <input type="hidden" id="product_rate_${id}" name="product_rates[]" value="${price}">
             <input type="hidden" id="product_totalrate_${id}" name="product_totalrates[]" value="${total_price}">
             <input type="hidden" id="product_salerate_${id}" name="product_salerates[]" value="${sale_price}">
             <td>${code}</td>
             <td>${name}</td>
-            <td>${pro_details}</td>
             <td>${price}</td>
             ${sale_price ? `<td>${sale_price}</td>` : ""}
             <td>${Currentquantity}</td>
@@ -625,9 +625,7 @@ $("#addProductPurchase").on("click", function () {
             <td>
                 <button type="button" onclick="removeByid('#product_idN_${id}')" 
                         class="fa fa-trash text-danger"></button>
-                <button type="button" onclick="editByid(${id}, '${code}', '${pro_details}', '${price}','${
-              sale_price ? `${sale_price}` : ""
-            }', '${product_quantity}')" 
+                <button type="button" onclick="editByid(${id}, '${code}', '${price}', '${product_quantity}')" 
                         class="fa fa-edit text-success"></button>
             </td>
         </tr>
@@ -646,13 +644,11 @@ $("#addProductPurchase").on("click", function () {
         <input type="hidden" data-price="${price}" data-quantity="${product_quantity}" 
                id="product_ids_${id}" class="product_ids" name="product_ids[]" value="${id}">
         <input type="hidden" id="product_quantites_${id}" name="product_quantites[]" value="${product_quantity}">
-        <input type="hidden" id="product_detail_${id}" name="product_detail[]" value="${pro_details}">
         <input type="hidden" id="product_rate_${id}" name="product_rates[]" value="${price}">
         <input type="hidden" id="product_totalrate_${id}" name="product_totalrates[]" value="${total_price}">
         <input type="hidden" id="product_salerate_${id}" name="product_salerates[]" value="${sale_price}">
         <td>${code}</td>
         <td>${name}</td>
-        <td>${pro_details}</td>
         <td>${price}</td>
         ${sale_price ? `<td>${sale_price}</td>` : ""}
         <td>${product_quantity}</td>
@@ -660,9 +656,7 @@ $("#addProductPurchase").on("click", function () {
         <td>
             <button type="button" onclick="removeByid('#product_idN_${id}')" 
                     class="fa fa-trash text-danger"></button>
-            <button type="button" onclick="editByid(${id}, '${code}', '${pro_details}', '${price}','${
-        sale_price ? `${sale_price}` : ""
-      }', '${product_quantity}')" 
+            <button type="button" onclick="editByid(${id}, '${code}', '${price}', '${product_quantity}')" 
                     class="fa fa-edit text-success"></button>
         </td>
     </tr>
@@ -725,14 +719,12 @@ function getOrderTotal() {
 
   getRemaingAmount();
 }
-function editByid(id, code, pro_details, price, sale_price, qty) {
+function editByid(id, code, price, qty) {
   // alert(pro_details);
   $(".searchableSelect").val(id);
 
   $("#get_product_code").val(code);
   $("#get_product_quantity").val(qty);
-  $("#get_product_detail").val(pro_details);
-  $("#get_product_sale_price").val(sale_price);
   $("#add_pro_type").val("update");
 
   var effect = function () {
@@ -1170,3 +1162,45 @@ function setAmountPaid(id, paid) {
     }
   });
 }
+
+// Chnage Balance Colors
+function updateBalance(balance, elementId) {
+  const $balanceSpan = $(`#${elementId}`);
+
+  // Update the class based on the balance value
+  if (balance >= 0) {
+    $balanceSpan.removeClass("text-danger").addClass("text-success");
+  } else {
+    $balanceSpan.removeClass("text-success").addClass("text-danger");
+  }
+}
+
+// Function to set up a MutationObserver for a specific element
+function observeBalanceChange(elementId) {
+  const targetNode = document.getElementById(elementId);
+
+  if (targetNode) {
+    const observer = new MutationObserver(() => {
+      const newBalance = parseFloat(targetNode.textContent); // Get the updated balance
+      if (!isNaN(newBalance)) {
+        updateBalance(newBalance, elementId); // Call the function with the updated value
+      }
+    });
+
+    // Configure the observer
+    observer.observe(targetNode, {
+      childList: true,
+      subtree: true,
+    });
+  } else {
+    console.error(`Element with ID '${elementId}' not found.`);
+  }
+}
+
+// Observe changes for the required elements
+observeBalanceChange("customer_account_exp");
+observeBalanceChange("to_account_bl");
+observeBalanceChange("from_account_bl");
+observeBalanceChange("from_account_exp");
+observeBalanceChange("to_account_exp");
+observeBalanceChange("account_sing");

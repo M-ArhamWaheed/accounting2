@@ -713,7 +713,7 @@ if (isset($_REQUEST['sale_order_client_name'])) {
 		$msg = "Please Add Any Product";
 		$sts = 'error';
 	}
-	echo json_encode(['msg' => $msg, 'sts' => $sts, 'order_id' => @$last_id, 'type' => "order", 'subtype' => $_REQUEST['payment_type']]);
+	echo json_encode(['msg' => $msg, 'sts' => $sts, 'order_id' => @$last_id, 'type' => "order", 'subtype' => $_REQUEST['payment_type'], 'print_url' => $get_company['print_url']]);
 }
 /*---------------------- credit sale-order   -------------------------------------------------------------------*/
 if (isset($_REQUEST['credit_order_client_name']) && empty($_REQUEST['quotation_form'])) {
@@ -968,7 +968,11 @@ if (isset($_REQUEST['getProductDetailsBycode'])) {
 	echo json_encode($product);
 }
 /*---------------------- cash purchase   -------------------------------------------------------------------*/
+<<<<<<< HEAD
 if (isset($_REQUEST['cash_purchase_supplier']) && empty($_REQUEST['lpo_form'])) {
+=======
+if (isset($_POST['cash_purchase_supplier'])) {
+>>>>>>> 6722fb73a93d646595d6e0d0056eb95fa02f53d9
 	if (!empty($_REQUEST['product_ids'])) {
 		# code...
 		$total_ammount = $total_grand = 0;
@@ -991,6 +995,22 @@ if (isset($_REQUEST['cash_purchase_supplier']) && empty($_REQUEST['lpo_form'])) 
 
 			if (insert_data($dbc, 'purchase', $data)) {
 				$last_id = mysqli_insert_id($dbc);
+
+				if (@$_FILES['upload_file']['tmp_name']) {
+					$tmp_name = @$_FILES['upload_file']['tmp_name'];
+					$extension = pathinfo(@$_FILES['upload_file']['name'], PATHINFO_EXTENSION);
+					$unique_name = uniqid('img_', true) . '.' . $extension;
+					$path =  $unique_name;
+
+					if (move_uploaded_file($tmp_name, '../img/uploads/' . $path)) {
+						$data_image = [
+							'bill_image' => $path,
+						];
+						update_data($dbc, "purchase", $data_image, "purchase_id", $last_id);
+					} else {
+						echo 'file not uploaded';
+					}
+				}
 
 				$x = 0;
 				foreach ($_REQUEST['product_ids'] as $key => $value) {
@@ -1020,12 +1040,12 @@ if (isset($_REQUEST['cash_purchase_supplier']) && empty($_REQUEST['lpo_form'])) 
 						$qty = (float)$quantity_instock['quantity_instock'] + $product_quantites;
 						$quantity_update = mysqli_query($dbc, "UPDATE product SET  quantity_instock='$qty' WHERE product_id='" . $product_id . "' ");
 					}
-					if (isset($_REQUEST['product_salerates'][$x])) {
-						$product_id = $_REQUEST['product_ids'][$x];
-						$quantity_instock = mysqli_fetch_assoc(mysqli_query($dbc, "SELECT current_rate FROM  product WHERE product_id='" . $product_id . "' "));
-						$current_rate = $_REQUEST['product_salerates'][$x];
-						$quantity_update = mysqli_query($dbc, "UPDATE product SET  current_rate='$current_rate' WHERE product_id='" . $product_id . "' ");
-					}
+					// if (isset($_REQUEST['product_salerates'][$x])) {
+					// 	$product_id = $_REQUEST['product_ids'][$x];
+					// 	$quantity_instock = mysqli_fetch_assoc(mysqli_query($dbc, "SELECT current_rate FROM  product WHERE product_id='" . $product_id . "' "));
+					// 	$current_rate = $_REQUEST['product_salerates'][$x];
+					// 	$quantity_update = mysqli_query($dbc, "UPDATE product SET  current_rate='$current_rate' WHERE product_id='" . $product_id . "' ");
+					// }
 
 
 
@@ -1202,7 +1222,7 @@ if (isset($_REQUEST['cash_purchase_supplier']) && empty($_REQUEST['lpo_form'])) 
 		$msg = "Please Add Any Product";
 		$sts = 'error';
 	}
-	echo json_encode(['msg' => $msg, 'sts' => $sts, 'order_id' => @$last_id, 'type' => "purchase", 'subtype' => $_REQUEST['payment_type']]);
+	echo json_encode(['msg' => $msg, 'sts' => $sts, 'order_id' => @$last_id, 'type' => "purchase", 'subtype' => $_REQUEST['payment_type'], 'print_url' => $get_company['print_url']]);
 }
 /*---------------------- credit Purchase-order  end -------------------------------------------------------------------*/
 if (isset($_REQUEST['get_products_code'])) {

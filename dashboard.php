@@ -75,6 +75,7 @@ if (isset($_REQUEST['orderdate']) && $_REQUEST['orderdate'] !== '') {
     $date_select = " AND DATE_FORMAT(timestamp, '%Y-%m-%d') = '" . date('Y-m-d') . "'";
 }
 
+<<<<<<< HEAD
 
 
 // Total Profit
@@ -96,6 +97,33 @@ WHERE
     1=1 $date_select 
     "))['total_profit'];
 $total_profit = isset($total_profit) ? $total_profit : 0;
+=======
+$salesGet = mysqli_query($dbc, "SELECT * FROM orders WHERE 1=1 $date_select ");
+$total_profit = 0;
+while ($fetchOrder = mysqli_fetch_assoc($salesGet)): ?>
+<?php
+    $sql = "SELECT * FROM order_item WHERE order_id = '$fetchOrder[order_id]' AND order_item_status=1";
+    $query = $dbc->query($sql);
+    while ($result = $query->fetch_assoc()) {
+        $product_id = $result['product_id'];
+        $sold_quantity = $result['quantity'];
+        $sold_rate = $result['rate'];
+        //$purchases_items ="SELECT * FROM purchase_item WHERE purchase_id=  ";
+        $sql_item = "SELECT * FROM purchase_item WHERE product_id = '$product_id'";
+        $query_item = $dbc->query($sql_item);
+        while ($result_item = $query_item->fetch_assoc()) {
+            $product_purchase = $result_item['rate'];
+            $sold_income = $sold_quantity * $sold_rate;
+            $purchase_income = $product_purchase * $sold_quantity;
+        }
+        $total_profit += @$sold_income - @$purchase_income;
+    } //while
+//echo $net_profit;
+endwhile;
+
+
+
+>>>>>>> 6722fb73a93d646595d6e0d0056eb95fa02f53d9
 ?>
 <style>
     .table-card {

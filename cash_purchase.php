@@ -27,11 +27,15 @@ if (!empty($_REQUEST['edit_purchase_id'])) {
 
         </div>
         <div class="card-body">
-          <form action="php_action/custom_action.php" method="POST" id="sale_order_fm">
+          <form action="php_action/custom_action.php" enctype="multipart/form-data" method="POST" id="sale_order_fm">
             <input type="hidden" name="product_purchase_id" value="<?= @empty($_REQUEST['edit_purchase_id']) ? "" : base64_decode($_REQUEST['edit_purchase_id']) ?>">
             <input type="hidden" name="payment_type" id="payment_type" value="cash_purchase">
             <div class="row form-group">
+<<<<<<< HEAD
               <div class="col-md-2">
+=======
+              <div class="col-md-1 ml-auto">
+>>>>>>> 6722fb73a93d646595d6e0d0056eb95fa02f53d9
                 <label>Purchase ID#</label>
                 <?php $result = mysqli_query($dbc, "
     SHOW TABLE STATUS LIKE 'purchase'
@@ -49,7 +53,7 @@ if (!empty($_REQUEST['edit_purchase_id'])) {
                 <label>Bill No</label>
                 <input type="text" name="bill_no" autocomplete="off" id="get_bill_no" value="<?= @$fetchOrder['bill_no'] ?>" class="form-control">
               </div>
-              <div class="col-sm-4">
+              <div class="col-sm-3">
                 <label>Select Supplier</label>
                 <div class="input-group">
                   <select class="form-control" name="cash_purchase_supplier" id="credit_order_client_name" required onchange="getBalance(this.value,'customer_account_exp')" aria-label="Username" aria-describedby="basic-addon1">
@@ -62,7 +66,9 @@ if (!empty($_REQUEST['edit_purchase_id'])) {
                     <?php   } ?>
                   </select>
                   <div class="input-group-prepend">
-                    <span class="input-group-text" id="basic-addon1">Balance : <span id="customer_account_exp">0</span> </span>
+                    <span class="input-group-text" id="basic-addon1">
+                      Balance : <span id="customer_account_exp" class="text-danger">0</span>
+                    </span>
                   </div>
                 </div>
                 <input type="hidden" name="customer_account" id="customer_account" value="<?= @$fetchPurchase['customer_account'] ?>">
@@ -73,14 +79,17 @@ if (!empty($_REQUEST['edit_purchase_id'])) {
                 <br>
                 <a href="customers.php?type=supplier" class="btn btn-admin2 btn-sm mt-2">Add</a>
               </div>
-              <div class="col-sm-2">
-                <label>Comment</label>
-                <input type="text" value="<?= @$fetchPurchase['purchase_narration'] ?>" autocomplete="off" class="form-control" name="purchase_narration">
-
+              <div class="col-md-2 mr-auto">
+                <label>Bill Image</label>
+                <input type="file" name="upload_file" autocomplete="off" id="upload_file" value="<?= @$fetchPurchase['bill_image'] ?>" class="form-control">
               </div>
             </div> <!-- end of form-group -->
             <div class="form-group row">
+<<<<<<< HEAD
               <div class="col-4 col-md-2">
+=======
+              <div class="col-4 col-md-1 ml-auto">
+>>>>>>> 6722fb73a93d646595d6e0d0056eb95fa02f53d9
                 <label>Product Code</label>
                 <input type="text" name="product_code" autocomplete="off" id="get_product_code" class="form-control">
               </div>
@@ -110,23 +119,23 @@ if (!empty($_REQUEST['edit_purchase_id'])) {
               </div>
 
               <div class="col-6 col-sm-2 col-md-2">
-                <label>Product Details</label>
-                <input type="text" class="form-control" id="get_product_detail">
-              </div>
-
-              <div class="col-6 col-sm-2 col-md-2">
                 <label>Price/piece</label>
                 <input type="number" min="0" <?= ($_SESSION['user_role'] == "admin") ? "" : "readonly" ?> class="form-control" id="get_product_price">
               </div>
-              <div class="col-6 col-sm-1 col-md-1">
+              <!-- <div class="col-6 col-sm-1 col-md-1">
                 <label>Sale Rate</label>
                 <input type="number" <?= ($_SESSION['user_role'] == "admin") ? "" : "readonly" ?> class="form-control" id="get_product_sale_price">
+<<<<<<< HEAD
               </div>
               <div class="col-6 col-sm-2 col-md-1">
+=======
+              </div> -->
+              <div class="col-6 col-sm-2 col-md-2">
+>>>>>>> 6722fb73a93d646595d6e0d0056eb95fa02f53d9
                 <label>Quantity</label>
                 <input type="number" class="form-control" id="get_product_quantity" value="1" min="1" name="quantity">
               </div>
-              <div class="col-sm-1">
+              <div class="col-sm-1 mr-auto">
                 <br>
                 <button type="button" class="btn btn-success btn-sm mt-2 float-right" id="addProductPurchase"><i class="fa fa-plus"></i> <b>Add</b></button>
               </div>
@@ -140,9 +149,7 @@ if (!empty($_REQUEST['edit_purchase_id'])) {
                     <tr>
                       <th>Code</th>
                       <th>Product Name</th>
-                      <th>Product Details</th>
                       <th>Unit Price</th>
-                      <th>Sale Rate</th>
                       <th>Quantity</th>
                       <th>Total Price</th>
                       <th>Action</th>
@@ -159,21 +166,18 @@ if (!empty($_REQUEST['edit_purchase_id'])) {
                           <input type="hidden" data-price="<?= $r['rate'] ?>" data-quantity="<?= $r['quantity'] ?>" id="product_ids_<?= $r['product_id'] ?>" class="product_ids" name="product_ids[]" value="<?= $r['product_id'] ?>">
                           <input type="hidden" id="product_quantites_<?= $r['product_id'] ?>" name="product_quantites[]" value="<?= $r['quantity'] ?>">
                           <input type="hidden" id="product_rate_<?= $r['product_id'] ?>" name="product_rates[]" value="<?= $r['rate'] ?>">
-                          <input type="hidden" id="product_detail_<?= $r['product_id'] ?>" name="product_detail[]" value="<?= $r['product_detail'] ?>">
                           <input type="hidden" id="product_totalrate_<?= $r['product_id'] ?>" name="product_totalrates[]" value="<?= $r['rate'] ?>">
-                          <input type="hidden" id="product_salerate_<?= $r['product_id'] ?>" name="product_salerates[]" value="<?= $r['sale_rate'] ?>">
+                          <!-- <input type="hidden" id="product_salerate_<?= $r['product_id'] ?>" name="product_salerates[]" value="<?= $r['sale_rate'] ?>"> -->
                           <td><?= $r['product_code'] ?></td>
                           <td><?= $r['product_name'] ?></td>
-                          <td><?= $r['product_detail'] ?></td>
                           <td><?= $r['rate'] ?></td>
-                          <td><?= $r['sale_rate'] ?></td>
                           <td><?= $r['quantity'] ?></td>
                           <td><?= (float)$r['rate'] * (float)$r['quantity'] ?></?>
                           </td>
                           <td>
 
                             <button type="button" onclick="removeByid(`#product_idN_<?= $r['product_id'] ?>`)" class="fa fa-trash text-danger" href="#"></button>
-                            <button type="button" onclick="editByid(<?= $r['product_id'] ?>,`<?= $r['product_code'] ?>`,`<?= $r['product_detail'] ?>`,<?= $r['rate'] ?>,<?= $r['sale_rate'] ?>,<?= $r['quantity'] ?>)" class="fa fa-edit text-success ml-2 "></button>
+                            <button type="button" onclick="editByid(<?= $r['product_id'] ?>,`<?= $r['product_code'] ?>`,<?= $r['rate'] ?>,<?= $r['quantity'] ?>)" class="fa fa-edit text-success ml-2 "></button>
 
                           </td>
                         </tr>
